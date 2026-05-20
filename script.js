@@ -1,5 +1,9 @@
+// Choices.js must be loaded in your HTML before this script:
+// <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+// <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
 const possibleAnswers = [
-  "Dublin", "Cork", "Galway", "Limerick", 
+  "Dublin", "Cork", "Galway", "Limerick",
   "London", "Paris", "Berlin", "Rome"
 ];
 
@@ -12,36 +16,37 @@ let currentQuestion = 0;
 let score = 0;
 
 const questionEl = document.getElementById("question");
-const answerSelect = document.getElementById("answerSelect");
-const submitBtn = document.getElementById("submitBtn");
-const nextBtn = document.getElementById("nextBtn");
-const scoreEl = document.getElementById("score");
+const submitBtn  = document.getElementById("submitBtn");
+const nextBtn    = document.getElementById("nextBtn");
+const scoreEl    = document.getElementById("score");
 
-// Only populate the dropdown ONCE at start, since options don't change
+// Initialise Choices.js on the existing <select>
+const choices = new Choices("#answerSelect", {
+  searchEnabled: true,
+  searchPlaceholderValue: "Type to search...",
+  itemSelectText: "",
+  shouldSort: false,
+});
+
 function populateDropdown() {
-  answerSelect.innerHTML = "";
-  possibleAnswers.forEach(answer => {
-    const option = document.createElement("option");
-    option.value = answer;
-    option.textContent = answer;
-    answerSelect.appendChild(option);
-  });
+  choices.clearChoices();
+  choices.setChoices(
+    possibleAnswers.map(a => ({ value: a, label: a })),
+    "value", "label", true
+  );
 }
 
 function loadQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
-  
-  // Reset UI elements for the new question
-  submitBtn.disabled = false;     // Fixes the double-submit bug
-  answerSelect.disabled = false;  // Let them select an answer again
-  answerSelect.selectedIndex = 0; // Reset dropdown to the first option
+  questionEl.textContent = questions[currentQuestion].question;
+  choices.setChoiceByValue(possibleAnswers[0]);
+  choices.enable();
+  submitBtn.disabled = false;
   nextBtn.style.display = "none";
 }
 
 submitBtn.onclick = () => {
-  const selected = answerSelect.value;
-  const correct = questions[currentQuestion].correct;
+  const selected = choices.getValue(true); // returns the selected value string
+  const correct  = questions[currentQuestion].correct;
 
   if (selected === correct) {
     score++;
@@ -50,28 +55,24 @@ submitBtn.onclick = () => {
     alert("Wrong! Correct answer: " + correct);
   }
 
-  // Freeze the current state so they can't change their mind or click submit again
+  choices.disable();
   submitBtn.disabled = true;
-  answerSelect.disabled = true;
   nextBtn.style.display = "inline-block";
 };
 
 nextBtn.onclick = () => {
   currentQuestion++;
-
   if (currentQuestion < questions.length) {
     loadQuestion();
   } else {
-    // Game Over State
     questionEl.textContent = "Game Over!";
-    answerSelect.style.display = "none";
+    choices.destroy(); // remove the widget entirely
+    document.getElementById("answerSelect").style.display = "none";
     submitBtn.style.display = "none";
-    nextBtn.style.display = "none";
-
+    nextBtn.style.display  = "none";
     scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
   }
 };
 
-// Initialize the game
 populateDropdown();
 loadQuestion();
