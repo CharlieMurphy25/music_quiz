@@ -1,13 +1,22 @@
+const possibleAnswers = [
+  "Dublin",
+  "Cork",
+  "Galway",
+  "Limerick",
+  "London",
+  "Paris",
+  "Berlin",
+  "Rome"
+];
+
 const questions = [
   {
     question: "What is the capital of Ireland?",
-    answers: ["Dublin", "Cork", "Galway", "Limerick"],
-    correct: 0
+    correct: "Dublin"
   },
   {
-    question: "2 + 2 = ?",
-    answers: ["3", "4", "5", "6"],
-    correct: 1
+    question: "Capital of France?",
+    correct: "Paris"
   }
 ];
 
@@ -15,45 +24,61 @@ let currentQuestion = 0;
 let score = 0;
 
 const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
+const answerSelect = document.getElementById("answerSelect");
+const submitBtn = document.getElementById("submitBtn");
 const nextBtn = document.getElementById("nextBtn");
 const scoreEl = document.getElementById("score");
+
+function populateDropdown() {
+  answerSelect.innerHTML = "";
+
+  possibleAnswers.forEach(answer => {
+    const option = document.createElement("option");
+    option.value = answer;
+    option.textContent = answer;
+
+    answerSelect.appendChild(option);
+  });
+}
 
 function loadQuestion() {
   const q = questions[currentQuestion];
 
   questionEl.textContent = q.question;
-  answersEl.innerHTML = "";
 
-  q.answers.forEach((answer, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = answer;
+  populateDropdown();
 
-    btn.onclick = () => {
-      if (index === q.correct) {
-        score++;
-      }
-
-      nextBtn.style.display = "block";
-    };
-
-    answersEl.appendChild(btn);
-  });
+  nextBtn.style.display = "none";
 }
+
+submitBtn.onclick = () => {
+  const selected = answerSelect.value;
+  const correct = questions[currentQuestion].correct;
+
+  if (selected === correct) {
+    score++;
+    alert("Correct!");
+  } else {
+    alert("Wrong! Correct answer: " + correct);
+  }
+
+  nextBtn.style.display = "inline-block";
+};
 
 nextBtn.onclick = () => {
   currentQuestion++;
 
   if (currentQuestion < questions.length) {
     loadQuestion();
-    nextBtn.style.display = "none";
   } else {
     questionEl.textContent = "Game Over!";
-    answersEl.innerHTML = "";
-    scoreEl.textContent = `Score: ${score}/${questions.length}`;
+    answerSelect.style.display = "none";
+    submitBtn.style.display = "none";
     nextBtn.style.display = "none";
+
+    scoreEl.textContent =
+      `Final Score: ${score}/${questions.length}`;
   }
 };
 
 loadQuestion();
-nextBtn.style.display = "none";
