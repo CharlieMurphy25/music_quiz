@@ -181,6 +181,11 @@ function loadQuestion() {
   questionEl.textContent = `Question ${currentQuestion + 1} of ${questions.length} — Which country does this flag belong to?`;
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${code}.png`;
 
+  // 💡 Reset the cartoon animation classes for the new question
+  answerInput.classList.remove("correct");
+  feedbackEl.className = "";
+  feedbackEl.style.color = ""; // Clear inline override
+
   answerInput.value = "";
   answerInput.disabled = false;
   answerInput.style.display = "";
@@ -236,11 +241,14 @@ submitBtn.onclick = () => {
 
   if (selected.toLowerCase() === correct.toLowerCase()) {
     score++;
-    feedbackEl.textContent = "✓ Correct!";
-    feedbackEl.style.color = "green";
+    feedbackEl.textContent = "CORRECT!";
+    // 💡 Add the cartoon text style and the input shake/glow
+    feedbackEl.className = "success-message"; 
+    answerInput.classList.add("correct");
   } else {
     feedbackEl.textContent = `✗ Wrong! Correct answer: ${correct}`;
-    feedbackEl.style.color = "red";
+    feedbackEl.className = ""; // Reset to default layout if wrong
+    feedbackEl.style.color = "#ef4444"; // Soft modern red
   }
 
   answerInput.disabled = true;
