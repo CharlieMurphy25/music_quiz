@@ -1,13 +1,7 @@
-// Choices.js must be loaded in your HTML before this script:
-// <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-// <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
 const possibleAnswers = [
   "Dublin", "Cork", "Galway", "Limerick",
   "London", "Paris", "Berlin", "Rome"
 ];
-
-const tryAgainBtn = document.getElementById("tryAgainBtn");
 
 const questions = [
   { question: "What is the capital of Ireland?", correct: "Dublin" },
@@ -18,37 +12,29 @@ let currentQuestion = 0;
 let score = 0;
 
 const questionEl = document.getElementById("question");
-const submitBtn  = document.getElementById("submitBtn");
-const nextBtn    = document.getElementById("nextBtn");
-const scoreEl    = document.getElementById("score");
-
-// Initialise Choices.js on the existing <select>
-const choices = new Choices("#answerSelect", {
-  searchEnabled: true,
-  searchPlaceholderValue: "Type to search...",
-  itemSelectText: "",
-  shouldSort: false,
-});
+const answerInput = document.getElementById("answerInput");
+const answerOptions = document.getElementById("answerOptions");
+const submitBtn = document.getElementById("submitBtn");
+const nextBtn = document.getElementById("nextBtn");
+const scoreEl = document.getElementById("score");
 
 function populateDropdown() {
-  choices.clearChoices();
-  choices.setChoices(
-    possibleAnswers.map(a => ({ value: a, label: a })),
-    "value", "label", true
-  );
+  answerOptions.innerHTML = possibleAnswers
+    .map(a => `<option value="${a}"></option>`)
+    .join("");
 }
 
 function loadQuestion() {
   questionEl.textContent = questions[currentQuestion].question;
-  choices.setChoiceByValue(possibleAnswers[0]);
-  choices.enable();
+  answerInput.value = "";
+  answerInput.focus();
   submitBtn.disabled = false;
   nextBtn.style.display = "none";
 }
 
 submitBtn.onclick = () => {
-  const selected = choices.getValue(true); // returns the selected value string
-  const correct  = questions[currentQuestion].correct;
+  const selected = answerInput.value.trim();
+  const correct = questions[currentQuestion].correct;
 
   if (selected === correct) {
     score++;
@@ -57,7 +43,7 @@ submitBtn.onclick = () => {
     alert("Wrong! Correct answer: " + correct);
   }
 
-  choices.disable();
+  answerInput.disabled = true;
   submitBtn.disabled = true;
   nextBtn.style.display = "inline-block";
 };
@@ -65,32 +51,15 @@ submitBtn.onclick = () => {
 nextBtn.onclick = () => {
   currentQuestion++;
   if (currentQuestion < questions.length) {
+    answerInput.disabled = false;
     loadQuestion();
   } else {
-  questionEl.textContent = "Game Over!";
-  choices.destroy();
-  document.getElementById("answerSelect").style.display = "none";
-  submitBtn.style.display = "none";
-  nextBtn.style.display = "none";
-  scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
-  tryAgainBtn.style.display = "inline-block";
-}
-};
-
-tryAgainBtn.onclick = () => {
-  currentQuestion = 0;
-  score = 0;
-
-  questionEl.textContent = "Loading question...";
-  submitBtn.style.display = "inline-block";
-  nextBtn.style.display = "none";
-  tryAgainBtn.style.display = "none";
-  scoreEl.textContent = "";
-
-  if (!choices.initialised) choices.init();
-  document.getElementById("answerSelect").style.display = "";
-  populateDropdown();
-  loadQuestion();
+    questionEl.textContent = "Game Over!";
+    answerInput.style.display = "none";
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "none";
+    scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
+  }
 };
 
 populateDropdown();
