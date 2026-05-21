@@ -48,10 +48,10 @@ let questions = buildQuestions();
 // ==========================================
 // 2. DOM ELEMENT SELECTION
 // ==========================================
-const questionEl    = document.getElementById("question");
-const answerInput   = document.getElementById("answerInput");
-const answerOptions = document.getElementById("answerOptions");
-const submitBtn     = document.getElementById("submitBtn");
+const questionEl      = document.getElementById("question");
+const answerInput     = document.getElementById("answerInput");
+const suggestionsList = document.getElementById("suggestions");
+const submitBtn       = document.getElementById("submitBtn");
 const nextBtn       = document.getElementById("nextBtn");
 const tryAgainBtn   = document.getElementById("tryAgainBtn");
 const feedbackEl    = document.getElementById("feedback");
@@ -69,13 +69,36 @@ let score = 0;
 // ==========================================
 
 /**
- * Renders the datalist options for the autocomplete input.
+ * Clears the suggestions list.
  */
-function populateDropdown() {
-  answerOptions.innerHTML = possibleAnswers
-    .map(answer => `<option value="${answer}"></option>`)
-    .join("");
+function clearSuggestions() {
+  suggestionsList.innerHTML = "";
 }
+
+/**
+ * Filters and renders up to 8 matching suggestions below the input.
+ */
+answerInput.addEventListener("input", () => {
+  const query = answerInput.value.trim().toLowerCase();
+  clearSuggestions();
+
+  if (!query) return;
+
+  const matches = possibleAnswers
+    .filter(a => a.toLowerCase().includes(query))
+    .slice(0, 8);
+
+  matches.forEach(match => {
+    const li = document.createElement("li");
+    li.textContent = match;
+    li.setAttribute("role", "option");
+    li.onclick = () => {
+      answerInput.value = match;
+      clearSuggestions();
+    };
+    suggestionsList.appendChild(li);
+  });
+});
 
 /**
  * Sets up the UI for the current question.
@@ -89,6 +112,7 @@ function loadQuestion() {
   answerInput.disabled = false;
   answerInput.style.display = "";
   answerInput.focus();
+  clearSuggestions();
 
   submitBtn.disabled = false;
   submitBtn.style.display = "";
@@ -128,6 +152,7 @@ submitBtn.onclick = () => {
   }
 
   errorEl.style.display = "none";
+  clearSuggestions();
 
   const correct = questions[currentQuestion].correct;
 
@@ -164,5 +189,4 @@ tryAgainBtn.onclick = () => {
 // ==========================================
 // 6. INITIALISATION
 // ==========================================
-populateDropdown();
 loadQuestion();
