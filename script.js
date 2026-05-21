@@ -73,7 +73,6 @@ const flags = [
   { code: "ae", country: "United Arab Emirates" },
   { code: "ir", country: "Iran" },
   { code: "iq", country: "Iraq" },
-  { code: "il", country: "Israel" },
 
   { code: "au", country: "Australia" },
   { code: "nz", country: "New Zealand" },
