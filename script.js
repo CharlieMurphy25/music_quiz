@@ -78,26 +78,44 @@ function clearSuggestions() {
 /**
  * Filters and renders up to 8 matching suggestions below the input.
  */
-answerInput.addEventListener("input", () => {
-  const query = answerInput.value.trim().toLowerCase();
+function renderSuggestions(matches) {
   clearSuggestions();
-
-  if (!query) return;
-
-  const matches = possibleAnswers
-    .filter(a => a.toLowerCase().includes(query))
-    .slice(0, 8);
 
   matches.forEach(match => {
     const li = document.createElement("li");
+
     li.textContent = match;
     li.setAttribute("role", "option");
+
     li.onclick = () => {
       answerInput.value = match;
       clearSuggestions();
     };
+
     suggestionsList.appendChild(li);
   });
+}
+
+answerInput.addEventListener("focus", () => {
+  if (!answerInput.value.trim()) {
+    renderSuggestions(possibleAnswers.slice(0, 8));
+  }
+});
+
+answerInput.addEventListener("input", () => {
+  const query = answerInput.value.trim().toLowerCase();
+
+  let matches;
+
+  if (!query) {
+    matches = possibleAnswers.slice(0, 8);
+  } else {
+    matches = possibleAnswers
+      .filter(a => a.toLowerCase().includes(query))
+      .slice(0, 8);
+  }
+
+  renderSuggestions(matches);
 });
 
 /**
@@ -124,6 +142,11 @@ function loadQuestion() {
   scoreEl.textContent = "";
 }
 
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".input-wrapper")) {
+    clearSuggestions();
+  }
+});
 /**
  * Handles the game over state and reveals the reset options.
  */
