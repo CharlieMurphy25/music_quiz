@@ -1,16 +1,49 @@
 // ==========================================
 // 1. DATA DEFINITIONS
 // ==========================================
-const possibleAnswers = [
-  "The Beatles", "Oasis", "Liam Gallagher", "Noel Gallagher", "Robbie Williams",
-  "Dublin", "London", "Paris", "Berlin"
+const flags = [
+  { code: "ie", country: "Ireland" },
+  { code: "gb", country: "United Kingdom" },
+  { code: "fr", country: "France" },
+  { code: "de", country: "Germany" },
+  { code: "it", country: "Italy" },
+  { code: "es", country: "Spain" },
+  { code: "pt", country: "Portugal" },
+  { code: "nl", country: "Netherlands" },
+  { code: "be", country: "Belgium" },
+  { code: "ch", country: "Switzerland" },
+  { code: "at", country: "Austria" },
+  { code: "se", country: "Sweden" },
+  { code: "no", country: "Norway" },
+  { code: "dk", country: "Denmark" },
+  { code: "fi", country: "Finland" },
+  { code: "pl", country: "Poland" },
+  { code: "cz", country: "Czech Republic" },
+  { code: "gr", country: "Greece" },
+  { code: "us", country: "United States" },
+  { code: "ca", country: "Canada" },
+  { code: "au", country: "Australia" },
+  { code: "nz", country: "New Zealand" },
+  { code: "jp", country: "Japan" },
+  { code: "cn", country: "China" },
+  { code: "br", country: "Brazil" },
+  { code: "mx", country: "Mexico" },
+  { code: "ar", country: "Argentina" },
+  { code: "za", country: "South Africa" },
+  { code: "ng", country: "Nigeria" },
+  { code: "in", country: "India" },
 ];
 
-const questions = [
-  { question: "Which iconic Britpop band released the hit album '(What's the Story) Morning Glory?'", correct: "Oasis" },
-  { question: "Who was a member of Take That before launching a massive solo career with hits like 'Angels'?", correct: "Robbie Williams" },
-  { question: "Which legendary Liverpool band released the album 'Abbey Road' in 1969?", correct: "The Beatles" }
-];
+const possibleAnswers = flags.map(f => f.country);
+
+function buildQuestions(count = 10) {
+  return [...flags]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, count)
+    .map(flag => ({ correct: flag.country, code: flag.code }));
+}
+
+let questions = buildQuestions();
 
 // ==========================================
 // 2. DOM ELEMENT SELECTION
@@ -48,7 +81,9 @@ function populateDropdown() {
  * Sets up the UI for the current question.
  */
 function loadQuestion() {
-  questionEl.textContent = questions[currentQuestion].question;
+  const { code } = questions[currentQuestion];
+  questionEl.textContent = `Question ${currentQuestion + 1} of ${questions.length} — Which country does this flag belong to?`;
+  document.getElementById("flagImg").src = `https://flagcdn.com/w320/${code}.png`;
 
   answerInput.value = "";
   answerInput.disabled = false;
@@ -120,6 +155,7 @@ nextBtn.onclick = () => {
 };
 
 tryAgainBtn.onclick = () => {
+  questions = buildQuestions();
   currentQuestion = 0;
   score = 0;
   loadQuestion();
