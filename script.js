@@ -110,4 +110,17 @@ submitBtn.onclick = () => {
 };
 
 // Handle moving to the next question or triggering end-game
-nextBtn.onclick = ()
+nextBtn.onclick = () => {
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    loadQuestion();
+  } else {
+    endGame();
+  }
+};
+
+// ==========================================
+// 6. INITIALISATION
+// ==========================================
+populateDropdown();
+loadQuestion();
