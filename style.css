@@ -26,22 +26,58 @@ button {
 
 #suggestions {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
+
   list-style: none;
+
   margin: 0;
-  padding: 0;
-  border: 1px solid #ccc;
-  background: white;
-  z-index: 10;
+  padding: 6px 0;
+
+  background: #2d2d2d;
+  border: 1px solid #444;
+
+  border-radius: 12px;
+
+  max-height: 320px;
+  overflow-y: auto;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+
+  z-index: 100;
 }
 
 #suggestions li {
-  padding: 8px 12px;
+  padding: 12px 16px;
+
+  color: white;
+
   cursor: pointer;
+
+  transition: background 0.15s ease;
 }
 
 #suggestions li:hover {
-  background: #f0f0f0;
+  background: #3f3f3f;
+}
+
+#answerInput {
+  width: 320px;
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+  border: 1px solid #444;
+
+  background: #2d2d2d;
+  color: white;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+#answerInput:focus {
+  border-color: #888;
 }
