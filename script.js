@@ -8,6 +8,7 @@ let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let currentAudio = null;
+let audioTimeout = null; // Track the 1-second playback limit
 
 // ==========================================
 // 2. DOM ELEMENT SELECTION
@@ -28,7 +29,7 @@ const scoreEl            = document.getElementById("score");
 // ==========================================
 // 3. HELPER FUNCTIONS
 // ==========================================
-function buildCombinedQuestions(count = 10) {
+function buildCombinedQuestions(count = 5) {
   // Ensure we only use tracks that successfully found an audio clip
   const validSongs = window.beatles.filter(s => s.clip !== "NOT_FOUND");
   possibleSongs = validSongs.map(s => s.title);
@@ -71,6 +72,23 @@ function renderSuggestions(matches, inputElement, listElement) {
   });
 }
 
+// Custom handler to play exactly 1 second of audio
+function playOneSecondSample() {
+  if (currentAudio) {
+    // Clear any pending pauses if clicked repeatedly
+    clearTimeout(audioTimeout);
+    
+    currentAudio.currentTime = 0;
+    currentAudio.play()
+      .then(() => {
+        audioTimeout = setTimeout(() => {
+          currentAudio.pause();
+        }, 1000); // Stop right at 1000ms
+      })
+      .catch(e => console.log("Audio playback waiting for user interaction..."));
+  }
+}
+
 // ==========================================
 // 4. CORE GAME ENGINE
 // ==========================================
@@ -81,10 +99,10 @@ function loadQuestion() {
   // 1. Update Flag Image
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${current.flagCode}.png`;
 
-  // 2. Handle Audio Playback
+  // 2. Handle Audio Setup (Do not auto-play, wait for button press)
+  clearTimeout(audioTimeout);
   if (currentAudio) { currentAudio.pause(); }
   currentAudio = new Audio(current.audioClip);
-  currentAudio.play().catch(e => console.log("Audio playback waiting for user interaction..."));
 
   // 3. Reset UI Fields & Styles
   answerInput.classList.remove("correct", "wrong");
@@ -109,6 +127,7 @@ function loadQuestion() {
 }
 
 function endGame() {
+  clearTimeout(audioTimeout);
   if (currentAudio) { currentAudio.pause(); }
   questionEl.textContent = "Game Over!";
   
@@ -125,12 +144,9 @@ function endGame() {
 // 5. EVENT LISTENERS
 // ==========================================
 
-// Replay button setup
+// Replay button plays the restricted 1-second sample
 replayBtn.onclick = () => {
-  if (currentAudio) {
-    currentAudio.currentTime = 0;
-    currentAudio.play();
-  }
+  playOneSecondSample();
 };
 
 // Country Input Suggestions
@@ -236,7 +252,7 @@ function initGame() {
     setTimeout(initGame, 300);
     return;
   }
-  questions = buildCombinedQuestions(10);
+  questions = buildCombinedQuestions(5); // Changed to 5 questions
   currentQuestion = 0;
   score = 0;
   loadQuestion();
