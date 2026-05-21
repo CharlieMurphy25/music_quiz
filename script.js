@@ -19,6 +19,10 @@ const answerOptions = document.getElementById("answerOptions");
 const submitBtn = document.getElementById("submitBtn");
 const nextBtn = document.getElementById("nextBtn");
 const scoreEl = document.getElementById("score");
+const feedbackEl = document.getElementById("feedback");
+const errorEl = document.getElementById("error");
+const quizForm = document.getElementById("quizForm");
+const quizContent = document.getElementById("quizContent");
 
 function populateDropdown() {
   answerOptions.innerHTML = possibleAnswers
@@ -32,6 +36,8 @@ function loadQuestion() {
   answerInput.focus();
   submitBtn.disabled = false;
   nextBtn.style.display = "none";
+  feedbackEl.textContent = "";
+  errorEl.style.display = "none";
 }
 
 submitBtn.onclick = () => {
@@ -40,9 +46,11 @@ submitBtn.onclick = () => {
 
   if (selected === correct) {
     score++;
-    alert("Correct!");
+    feedbackEl.textContent = "✓ Correct!";
+    feedbackEl.style.color = "green";
   } else {
-    alert("Wrong! Correct answer: " + correct);
+    feedbackEl.textContent = `✗ Wrong! Correct answer: ${correct}`;
+    feedbackEl.style.color = "red";
   }
 
   answerInput.disabled = true;
@@ -57,9 +65,7 @@ nextBtn.onclick = () => {
     loadQuestion();
   } else {
     questionEl.textContent = "Game Over!";
-    answerInput.style.display = "none";
-    submitBtn.style.display = "none";
-    nextBtn.style.display = "none";
+    quizForm.style.display = "none";
     scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
     tryAgainBtn.style.display = "inline-block";
   }
@@ -70,13 +76,18 @@ tryAgainBtn.onclick = () => {
   score = 0;
 
   questionEl.textContent = "Loading question...";
-  submitBtn.style.display = "inline-block";
-  nextBtn.style.display = "none";
+  quizForm.style.display = "block";
   tryAgainBtn.style.display = "none";
   scoreEl.textContent = "";
+  feedbackEl.textContent = "";
+  errorEl.style.display = "none";
   
-  answerInput.style.display = "inline-block";
+  answerInput.value = "";
   answerInput.disabled = false;
+  submitBtn.style.display = "inline-block";
+  submitBtn.disabled = false;
+  nextBtn.style.display = "none";
+  
   populateDropdown();
   loadQuestion();
 };
