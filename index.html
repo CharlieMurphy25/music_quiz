@@ -3,27 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Game</title>
+  <meta name="description" content="A music quiz game where you can test your knowledge">
+  <title>Music Quiz Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <main class="container">
-    <h1>Quiz Game</h1>
+    <h1>Music Quiz Game</h1>
 
-    <h2 id="question">Loading question...</h2>
+    <section id="quizContent" aria-labelledby="question">
+      <h2 id="question">Loading question...</h2>
 
-    <label for="answerInput" class="sr-only">Choose your answer:</label>
-    <input type="text" id="answerInput" list="answerOptions" placeholder="Type to search...">
-    <datalist id="answerOptions"></datalist>
+      <form id="quizForm">
+        <label for="answerInput">Choose your answer:</label>
+        <input 
+          type="text" 
+          id="answerInput" 
+          list="answerOptions" 
+          placeholder="Type to search..."
+          autocomplete="off"
+          aria-describedby="answerHint"
+        >
+        <datalist id="answerOptions"></datalist>
+        <small id="answerHint" class="hint">Start typing to filter options</small>
 
-    <div class="controls">
-      <button id="submitBtn">Submit</button>
-      <button id="nextBtn" style="display: none;">Next</button>
-      <button id="tryAgainBtn" style="display: none;">Try Again</button>
-    </div>
+        <div class="controls">
+          <button type="button" id="submitBtn" aria-label="Submit your answer">Submit</button>
+          <button type="button" id="nextBtn" style="display: none;" aria-label="Move to next question">Next</button>
+          <button type="button" id="tryAgainBtn" style="display: none;" aria-label="Try this question again">Try Again</button>
+        </div>
+      </form>
 
-    <div id="score" aria-live="polite"></div>
+      <div id="feedback" aria-live="polite" aria-atomic="true"></div>
+      <div id="error" role="alert" aria-live="assertive" style="display: none;"></div>
+    </section>
+
+    <div id="score" aria-live="polite" aria-label="Current score"></div>
   </main>
 
   <script src="script.js"></script>
