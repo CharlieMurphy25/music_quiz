@@ -7,6 +7,8 @@ const possibleAnswers = [
   "London", "Paris", "Berlin", "Rome"
 ];
 
+const tryAgainBtn = document.getElementById("tryAgainBtn");
+
 const questions = [
   { question: "What is the capital of Ireland?", correct: "Dublin" },
   { question: "Capital of France?", correct: "Paris" }
@@ -65,13 +67,30 @@ nextBtn.onclick = () => {
   if (currentQuestion < questions.length) {
     loadQuestion();
   } else {
-    questionEl.textContent = "Game Over!";
-    choices.destroy(); // remove the widget entirely
-    document.getElementById("answerSelect").style.display = "none";
-    submitBtn.style.display = "none";
-    nextBtn.style.display  = "none";
-    scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
-  }
+  questionEl.textContent = "Game Over!";
+  choices.destroy();
+  document.getElementById("answerSelect").style.display = "none";
+  submitBtn.style.display = "none";
+  nextBtn.style.display = "none";
+  scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
+  tryAgainBtn.style.display = "inline-block";
+}
+};
+
+tryAgainBtn.onclick = () => {
+  currentQuestion = 0;
+  score = 0;
+
+  questionEl.textContent = "Loading question...";
+  submitBtn.style.display = "inline-block";
+  nextBtn.style.display = "none";
+  tryAgainBtn.style.display = "none";
+  scoreEl.textContent = "";
+
+  if (!choices.initialised) choices.init();
+  document.getElementById("answerSelect").style.display = "";
+  populateDropdown();
+  loadQuestion();
 };
 
 populateDropdown();
