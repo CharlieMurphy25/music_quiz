@@ -32,10 +32,15 @@ function populateDropdown() {
 
 function loadQuestion() {
   questionEl.textContent = questions[currentQuestion].question;
+
   answerInput.value = "";
+  answerInput.disabled = false;
   answerInput.focus();
+
   submitBtn.disabled = false;
+
   nextBtn.style.display = "none";
+
   feedbackEl.textContent = "";
   errorEl.style.display = "none";
 }
@@ -65,7 +70,9 @@ nextBtn.onclick = () => {
     loadQuestion();
   } else {
     questionEl.textContent = "Game Over!";
-    quizForm.style.display = "none";
+    answerInput.style.display = "none";
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "none";
     scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
     tryAgainBtn.style.display = "inline-block";
   }
