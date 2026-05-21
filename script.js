@@ -440,7 +440,8 @@ tryAgainBtn.onclick = () => {
   songInput.style.display = "";
   submitBtn.style.display = "";
   replayBtn.style.display = "";
-
+  answerInput.classList.remove("correct", "wrong");
+  songInput.classList.remove("correct", "wrong");
   initGame();
 };
 
