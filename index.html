@@ -13,37 +13,45 @@
     <section id="quizContent" aria-labelledby="question">
       <h2 id="question">Loading question...</h2>
 
-      <img id="flagImg" src="" alt="Guess this flag" width="320">
-      
-      <div class="audio-controls">
-        <button type="button" id="replayBtn" aria-label="Replay audio track">🎵 Replay Song Clip</button>
-      </div>
-
       <form id="quizForm">
-        <div class="input-group">
-          <label for="answerInput">Which country does this flag belong to?</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="answerInput"
-              placeholder="Type to search countries..."
-              autocomplete="off"
-            >
-            <ul id="suggestions" role="listbox" aria-label="Country suggestions"></ul>
+        <div class="quiz-row">
+          
+          <div class="quiz-column">
+            <div class="media-container">
+              <img id="flagImg" src="" alt="Guess this flag">
+            </div>
+            <div class="input-group">
+              <label for="answerInput">Which country does this flag belong to?</label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="answerInput"
+                  placeholder="Type to search countries..."
+                  autocomplete="off"
+                >
+                <ul id="suggestions" class="suggestions-dropdown" role="listbox" aria-label="Country suggestions"></ul>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="input-group">
-          <label for="songInput">What Beatles song is playing?</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="songInput"
-              placeholder="Type to search songs..."
-              autocomplete="off"
-            >
-            <ul id="songSuggestions" role="listbox" aria-label="Song suggestions"></ul>
+          <div class="quiz-column">
+            <div class="media-container">
+              <button type="button" id="replayBtn" class="play-sample-btn" aria-label="Play 1 second audio track">🎵 Play 1s Sample</button>
+            </div>
+            <div class="input-group">
+              <label for="songInput">What Beatles song is playing?</label>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  id="songInput"
+                  placeholder="Type to search songs..."
+                  autocomplete="off"
+                >
+                <ul id="songSuggestions" class="suggestions-dropdown" role="listbox" aria-label="Song suggestions"></ul>
+              </div>
+            </div>
           </div>
+
         </div>
 
         <div class="controls">
