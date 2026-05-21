@@ -123,22 +123,15 @@ let score = 0;
 // 4. CORE FUNCTIONS
 // ==========================================
 
-/**
- * Clears the suggestions list.
- */
 function clearSuggestions() {
   suggestionsList.innerHTML = "";
 }
 
-/**
- * Filters and renders up to 8 matching suggestions below the input.
- */
 function renderSuggestions(matches) {
   clearSuggestions();
 
   matches.forEach(match => {
     const li = document.createElement("li");
-
     li.textContent = match;
     li.setAttribute("role", "option");
 
@@ -159,7 +152,6 @@ answerInput.addEventListener("focus", () => {
 
 answerInput.addEventListener("input", () => {
   const query = answerInput.value.trim().toLowerCase();
-
   let matches;
 
   if (!query) {
@@ -181,8 +173,8 @@ function loadQuestion() {
   questionEl.textContent = `Question ${currentQuestion + 1} of ${questions.length} — Which country does this flag belong to?`;
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${code}.png`;
 
-  // Reset cartoon feedback classes from the previous round
-  answerInput.classList.remove("correct");
+  // 🧼 Clear out both success and failure classes from previous round
+  answerInput.classList.remove("correct", "wrong");
   feedbackEl.className = "";
   feedbackEl.style.color = ""; 
 
@@ -208,12 +200,8 @@ document.addEventListener("click", (e) => {
   }
 });
 
-/**
- * Handles the game over state and reveals the reset options.
- */
 function endGame() {
   questionEl.textContent = "Game Over!";
-
   answerInput.style.display = "none";
   submitBtn.style.display = "none";
   nextBtn.style.display = "none";
@@ -243,12 +231,12 @@ submitBtn.onclick = () => {
   if (selected.toLowerCase() === correct.toLowerCase()) {
     score++;
     feedbackEl.textContent = "CORRECT!";
-    feedbackEl.className = "success-message"; // Triggers cartoon text pop
-    answerInput.classList.add("correct");      // Triggers bouncy green input
+    feedbackEl.className = "success-message"; // Bouncy Green Pop text
+    answerInput.classList.add("correct");      // Bouncy Green box
   } else {
-    feedbackEl.textContent = `✗ Wrong! Correct answer: ${correct}`;
-    feedbackEl.className = ""; 
-    feedbackEl.style.color = "#ef4444"; // Modern clean red color
+    feedbackEl.textContent = `WRONG! ANSWER IS: ${correct}`;
+    feedbackEl.className = "error-message";   // Bouncy Red Pop text
+    answerInput.classList.add("wrong");        // Shaking Red box
   }
 
   answerInput.disabled = true;
