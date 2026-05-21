@@ -56,14 +56,13 @@ nextBtn.onclick = () => {
     answerInput.disabled = false;
     loadQuestion();
   } else {
-  questionEl.textContent = "Game Over!";
-  choices.destroy();
-  document.getElementById("answerSelect").style.display = "none";
-  submitBtn.style.display = "none";
-  nextBtn.style.display = "none";
-  scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
-  tryAgainBtn.style.display = "inline-block";
-}
+    questionEl.textContent = "Game Over!";
+    answerInput.style.display = "none";
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "none";
+    scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
+    tryAgainBtn.style.display = "inline-block";
+  }
 };
 
 tryAgainBtn.onclick = () => {
@@ -75,9 +74,9 @@ tryAgainBtn.onclick = () => {
   nextBtn.style.display = "none";
   tryAgainBtn.style.display = "none";
   scoreEl.textContent = "";
-
-  if (!choices.initialised) choices.init();
-  document.getElementById("answerSelect").style.display = "";
+  
+  answerInput.style.display = "inline-block";
+  answerInput.disabled = false;
   populateDropdown();
   loadQuestion();
 };
