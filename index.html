@@ -3,35 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A flag quiz game where you guess the country from its flag">
-  <title>Flag Quiz Game</title>
+  <meta name="description" content="A flag and music quiz game">
+  <title>Flag & Music Quiz</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="container">
-    <h1>Flag Quiz</h1>
+    <h1>Flag & Music Quiz</h1>
     <section id="quizContent" aria-labelledby="question">
       <h2 id="question">Loading question...</h2>
 
       <img id="flagImg" src="" alt="Guess this flag" width="320">
+      
+      <div class="audio-controls">
+        <button type="button" id="replayBtn" aria-label="Replay audio track">🎵 Replay Song Clip</button>
+      </div>
 
       <form id="quizForm">
-        <label for="answerInput">Which country does this flag belong to?</label>
-        <div class="input-wrapper">
-          <input
-            type="text"
-            id="answerInput"
-            placeholder="Type to search..."
-            autocomplete="off"
-            aria-describedby="answerHint"
-            aria-autocomplete="list"
-            aria-controls="suggestions"
-          >
-          <ul id="suggestions" role="listbox" aria-label="Country suggestions"></ul>
+        <div class="input-group">
+          <label for="answerInput">Which country does this flag belong to?</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="answerInput"
+              placeholder="Type to search countries..."
+              autocomplete="off"
+            >
+            <ul id="suggestions" role="listbox" aria-label="Country suggestions"></ul>
+          </div>
         </div>
-        <small id="answerHint" class="hint">Start typing to filter countries</small>
+
+        <div class="input-group">
+          <label for="songInput">What Beatles song is playing?</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="songInput"
+              placeholder="Type to search songs..."
+              autocomplete="off"
+            >
+            <ul id="songSuggestions" role="listbox" aria-label="Song suggestions"></ul>
+          </div>
+        </div>
+
         <div class="controls">
-          <button type="button" id="submitBtn" aria-label="Submit your answer">Submit</button>
+          <button type="button" id="submitBtn" aria-label="Submit your answers">Submit</button>
           <button type="button" id="nextBtn" style="display: none;" aria-label="Move to next question">Next</button>
         </div>
       </form>
