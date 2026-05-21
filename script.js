@@ -429,6 +429,9 @@ nextBtn.onclick = () => {
 tryAgainBtn.onclick = () => {
   answerInput.style.display = "";
   songInput.style.display = "";
+  submitBtn.style.display = "";
+  replayBtn.style.display = "";
+
   initGame();
 };
 
