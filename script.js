@@ -8,6 +8,8 @@ const questions = [
   { question: "Capital of France?", correct: "Paris" }
 ];
 
+const tryAgainBtn = document.getElementById("tryAgainBtn");
+
 let currentQuestion = 0;
 let score = 0;
 
@@ -54,12 +56,30 @@ nextBtn.onclick = () => {
     answerInput.disabled = false;
     loadQuestion();
   } else {
-    questionEl.textContent = "Game Over!";
-    answerInput.style.display = "none";
-    submitBtn.style.display = "none";
-    nextBtn.style.display = "none";
-    scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
-  }
+  questionEl.textContent = "Game Over!";
+  choices.destroy();
+  document.getElementById("answerSelect").style.display = "none";
+  submitBtn.style.display = "none";
+  nextBtn.style.display = "none";
+  scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
+  tryAgainBtn.style.display = "inline-block";
+}
+};
+
+tryAgainBtn.onclick = () => {
+  currentQuestion = 0;
+  score = 0;
+
+  questionEl.textContent = "Loading question...";
+  submitBtn.style.display = "inline-block";
+  nextBtn.style.display = "none";
+  tryAgainBtn.style.display = "none";
+  scoreEl.textContent = "";
+
+  if (!choices.initialised) choices.init();
+  document.getElementById("answerSelect").style.display = "";
+  populateDropdown();
+  loadQuestion();
 };
 
 populateDropdown();
