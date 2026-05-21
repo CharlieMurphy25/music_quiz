@@ -19,3 +19,29 @@ button {
   display: block;
   margin: 0 auto;
 }
+
+.input-wrapper {
+  position: relative;
+}
+
+#suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc;
+  background: white;
+  z-index: 10;
+}
+
+#suggestions li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+#suggestions li:hover {
+  background: #f0f0f0;
+}
