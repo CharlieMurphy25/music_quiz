@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-  margin-top: 80px; /* Reduced slightly from 140px to safely clear tall row contents */
+  margin-top: 80px; 
 }
 
 button {
@@ -35,7 +35,7 @@ button:hover {
 }
 
 /* ==========================================
-   🧱 SIDE-BY-SIDE GRID ARCHITECTURE
+   🧱 FLEXBOX COLUMN SYSTEM
    ========================================== */
 .quiz-row {
   display: flex;
@@ -53,10 +53,10 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 0; /* Prevents flex items from breaking layout boundaries */
+  min-width: 0; 
 }
 
-/* Equalizing heights across media slots to align inputs horizontally */
+/* Fixes horizontal input alignment mismatch */
 .media-container {
   height: 160px;
   width: 100%;
@@ -113,7 +113,7 @@ button:hover {
 }
 
 /* ==========================================
-   🎨 UNIFORM INPUT & DROPDOWN STYLES
+   🎨 UNIFORM INPUTS & DROPDOWN ENGINE
    ========================================== */
 #answerInput, #songInput {
   width: 100%; 
@@ -133,7 +133,7 @@ button:hover {
   box-shadow: 0 0 0 2px rgba(161, 161, 170, 0.2); 
 }
 
-/* Unified Dropdown Lists (Applied to both via class) */
+/* Shared dropdown overlay rule */
 .suggestions-dropdown {
   position: absolute;
   top: calc(100% + 8px); 
@@ -169,7 +169,6 @@ button:hover {
    🎉 CARTOONISH FEEDBACK STYLES (SHARED)
    ========================================== */
 
-/* --- CORRECT STATE (Both fields share this now) --- */
 #answerInput.correct, #songInput.correct {
   background-color: #14532d; 
   border: 3px solid #22c55e; 
@@ -192,7 +191,6 @@ button:hover {
   animation: cartoonPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* --- WRONG STATE (Both fields share this now) --- */
 #answerInput.wrong, #songInput.wrong {
   background-color: #4c0519; 
   border: 3px solid #ef4444; 
