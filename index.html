@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Game</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-  
 </head>
 <body>
 
   <main class="container">
     <h1>Quiz Game</h1>
 
-    <!-- Use an h2 or paragraph for the question text -->
     <h2 id="question">Loading question...</h2>
 
-    <!-- Label added for accessibility; can be visually hidden with CSS if desired -->
-    <label Invisible href="#answerSelect" class="sr-only">Choose your answer:</label>
-    <!-- Replace your <select> with this -->
+    <label for="answerInput" class="sr-only">Choose your answer:</label>
     <input type="text" id="answerInput" list="answerOptions" placeholder="Type to search...">
-    <datalist id="answerOptions">  </datalist>
+    <datalist id="answerOptions"></datalist>
 
-    <!-- Wrapped buttons in a control group for easier CSS layout styling -->
     <div class="controls">
       <button id="submitBtn">Submit</button>
-      <!-- Hidden by default to prevent flashing on page load -->
       <button id="nextBtn" style="display: none;">Next</button>
-
-      <button id="tryAgainBtn" style="display: none;">Try Again</button>
     </div>
 
     <div id="score" aria-live="polite"></div>
