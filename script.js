@@ -80,7 +80,7 @@ function playOneSecondSample() {
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 1000); // Truncate at exactly 1 second
+        }, 1500); // Truncate at exactly 1 second
       })
       .catch(e => console.log("Audio playback waiting for user click interaction..."));
   }
