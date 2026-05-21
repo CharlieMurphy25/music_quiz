@@ -7,12 +7,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Increased top margin to give the whole UI more breathing room from the top of the screen */
 .container {
   margin-top: 140px; 
 }
 
-/* Added more vertical margin so buttons don't crowd the input wrapper */
 button {
   margin: 35px 20px; 
   padding: 12px 24px;
@@ -33,12 +31,9 @@ button:hover {
 
 #tryAgainBtn {
   display: block;
-  margin: 35px auto; /* Matches the updated button spacing */
+  margin: 35px auto; 
 }
 
-/* Added a generous bottom margin here. 
-   Because the dropdown floats absolutely, this margin forces elements below it 
-   (like buttons) to stay far enough away so the dropdown won't cover them up. */
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -48,7 +43,7 @@ button:hover {
 
 #suggestions {
   position: absolute;
-  top: calc(100% + 8px); /* Slightly increased gap between input and dropdown */
+  top: calc(100% + 8px); 
   left: 0;
   right: 0;
   list-style: none;
@@ -57,13 +52,13 @@ button:hover {
   border: 1px solid #3f3f46;
   background: #1f1f23;
   border-radius: 12px; 
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6); /* Richer shadow for better separation */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6); 
   z-index: 10;
   overflow: hidden;
 }
 
 #suggestions li {
-  padding: 12px 14px; /* Slightly taller padding for better touch/click targets */
+  padding: 12px 14px; 
   cursor: pointer;
   color: #d4d4d8;
   text-align: left; 
@@ -80,17 +75,64 @@ button:hover {
 #answerInput {
   width: 100%; 
   box-sizing: border-box; 
-  padding: 14px 16px; /* Slightly taller input for a more premium feel */
+  padding: 14px 16px; 
   border-radius: 12px;
   border: 1px solid #3f3f46;
   background: #1f1f23;
   color: white;
   font-size: 16px;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
 }
 
 #answerInput:focus {
   border-color: #a1a1aa; 
   box-shadow: 0 0 0 2px rgba(161, 161, 170, 0.2); 
+}
+
+/* ==========================================
+   🎉 CARTOONISH "CORRECT" FEEDBACK STYLES
+   ========================================== */
+
+/* 1. Add this class to your #answerInput via JS when the answer is correct */
+#answerInput.correct {
+  background-color: #14532d; /* Deep comic-book green background */
+  border: 3px solid #22c55e; /* Vibrant lime/emerald border */
+  color: #bbf7d0; /* Soft neon light green text */
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); /* Juicy outer glow */
+  transform: scale(1.05); /* Slight juicy pop outward */
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 2. Optional: Add a text element like <div class="success-message">CORRECT!</div> */
+.success-message {
+  font-family: "Impact", "Arial Black", sans-serif; /* Thick, cartoonish font stack */
+  font-size: 32px;
+  color: #22c55e;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  
+  /* Cartoon text outline effect */
+  text-shadow: 
+    -2px -2px 0 #000,  
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000;
+     
+  animation: cartoonPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 3. The bouncy, elastic cartoon animations */
+@keyframes popIn {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
+@keyframes cartoonPop {
+  0% { transform: scale(0) rotate(-5deg); opacity: 0; }
+  70% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
 }
