@@ -15,18 +15,15 @@ const questions = [
 // ==========================================
 // 2. DOM ELEMENT SELECTION
 // ==========================================
-const questionEl = document.getElementById("question");
-const answerInput = document.getElementById("answerInput");
+const questionEl    = document.getElementById("question");
+const answerInput   = document.getElementById("answerInput");
 const answerOptions = document.getElementById("answerOptions");
-const quizForm = document.getElementById("quizForm");
-
-const submitBtn = document.getElementById("submitBtn");
-const nextBtn = document.getElementById("nextBtn");
-const tryAgainBtn = document.getElementById("tryAgainBtn");
-
-const feedbackEl = document.getElementById("feedback");
-const errorEl = document.getElementById("error");
-const scoreEl = document.getElementById("score");
+const submitBtn     = document.getElementById("submitBtn");
+const nextBtn       = document.getElementById("nextBtn");
+const tryAgainBtn   = document.getElementById("tryAgainBtn");
+const feedbackEl    = document.getElementById("feedback");
+const errorEl       = document.getElementById("error");
+const scoreEl       = document.getElementById("score");
 
 // ==========================================
 // 3. GAME STATE
@@ -51,21 +48,21 @@ function populateDropdown() {
  * Sets up the UI for the current question.
  */
 function loadQuestion() {
-  // Update question text
   questionEl.textContent = questions[currentQuestion].question;
 
-  // Reset and enable input field
   answerInput.value = "";
   answerInput.disabled = false;
+  answerInput.style.display = "";
   answerInput.focus();
 
-  // Reset button states
   submitBtn.disabled = false;
+  submitBtn.style.display = "";
   nextBtn.style.display = "none";
+  tryAgainBtn.style.display = "none";
 
-  // Clear previous feedback or errors
   feedbackEl.textContent = "";
   errorEl.style.display = "none";
+  scoreEl.textContent = "";
 }
 
 /**
@@ -73,13 +70,11 @@ function loadQuestion() {
  */
 function endGame() {
   questionEl.textContent = "Game Over!";
-  
-  // Hide active gameplay elements
+
   answerInput.style.display = "none";
   submitBtn.style.display = "none";
   nextBtn.style.display = "none";
-  
-  // Display final summary and reset controls
+
   scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
   tryAgainBtn.style.display = "block";
 }
@@ -88,12 +83,19 @@ function endGame() {
 // 5. EVENT LISTENERS
 // ==========================================
 
-// Handle answer submission
 submitBtn.onclick = () => {
   const selected = answerInput.value.trim();
+
+  if (!selected) {
+    errorEl.textContent = "Please enter an answer before submitting.";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  errorEl.style.display = "none";
+
   const correct = questions[currentQuestion].correct;
 
-  // Case-insensitive comparison check (optional, but highly recommended for text inputs)
   if (selected.toLowerCase() === correct.toLowerCase()) {
     score++;
     feedbackEl.textContent = "✓ Correct!";
@@ -103,13 +105,11 @@ submitBtn.onclick = () => {
     feedbackEl.style.color = "red";
   }
 
-  // Lock input and toggle control buttons
   answerInput.disabled = true;
   submitBtn.disabled = true;
   nextBtn.style.display = "inline-block";
 };
 
-// Handle moving to the next question or triggering end-game
 nextBtn.onclick = () => {
   currentQuestion++;
   if (currentQuestion < questions.length) {
@@ -117,6 +117,12 @@ nextBtn.onclick = () => {
   } else {
     endGame();
   }
+};
+
+tryAgainBtn.onclick = () => {
+  currentQuestion = 0;
+  score = 0;
+  loadQuestion();
 };
 
 // ==========================================
