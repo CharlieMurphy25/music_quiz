@@ -271,14 +271,15 @@ function renderSuggestions(matches, inputElement, listElement) {
 
 function playOneSecondSample() {
   if (currentAudio) {
-    clearTimeout(audioTimeout);
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
     
     currentAudio.currentTime = 0;
     currentAudio.play()
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 1000); // 1-second sample window cut-off
+        }, 2000); // 2-second sample window cut-off
       })
       .catch(e => console.log("Audio waiting for manual user interaction gesture..."));
   }
@@ -326,6 +327,7 @@ function endGame() {
 
   if (currentAudio) {
     currentAudio.pause();
+    currentAudio.currentTime = 0;
   }
 
   questionEl.textContent = "Game Over!";
