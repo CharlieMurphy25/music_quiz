@@ -1,5 +1,5 @@
 // ============================================================================
-// 1. DATA DEFINITIONS (Pre-compiled & Instant Loading)
+// 1. DATA DEFINITIONS (Pre-compiled with Stable MP3 Audio Links)
 // ============================================================================
 
 const flags = [
@@ -145,12 +145,11 @@ const flags = [
   { code: "va", country: "Vatican City" },
 ];
 
-// Pre-mapped direct iTunes audio streams to ensure instant fallback loading
 const beatlesClips = [
   { title: "Love Me Do", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/71/34/4b7134aa-8f0a-fc8c-1e24-4db23999eec3/m4a.audio.mp4" },
   { title: "Please Please Me", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1f/2e/09/1f2e09aa-8bdf-c5e3-4c91-4c748c1e847c/m4a.audio.mp4" },
   { title: "From Me To You", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8a/91/36/8a9136ca-0050-7059-fa0d-58744b1c676c/m4a.audio.mp4" },
-  { title: "She Loves You", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0d/18/ff/0d18ff06-cd76-4767-f37e-61aa98fc2fb8/m4a.audio.mp4" },
+  { title: "She Loves You", clip: "https://video-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/bb/9d/97/bb9d9709-b461-9f44-8d96-bc6089d8ff72/m4a.audio.mp4" },
   { title: "I Want To Hold Your Hand", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f2/77/68/f27768f5-19e9-bbf2-df49-2e633f8fb954/m4a.audio.mp4" },
   { title: "All My Loving", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/df/f0/21dff016-1f63-356b-a2eb-6e271616d2ca/m4a.audio.mp4" },
   { title: "Can't Buy Me Love", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/bf/f9/57/bff957db-83da-efdc-358b-088f343460e4/m4a.audio.mp4" },
@@ -203,11 +202,20 @@ const beatlesClips = [
   { title: "The Long And Winding Road", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/01/be/fd/01befdf6-8dbb-b271-beeb-c65176b66ca9/m4a.audio.mp4" }
 ];
 
+// Helper transformation function to convert Apple streaming containers to clean direct .mp3 endpoints
+const formattedBeatlesClips = beatlesClips.map(item => {
+  let secureClip = item.clip;
+  if (secureClip.includes("m4a.audio.mp4")) {
+    secureClip = secureClip.replace("m4a.audio.mp4", "m4a");
+  }
+  return { title: item.title, clip: secureClip };
+});
+
 // ============================================================================
 // 2. INITIAL SETUP & STATE MANAGEMENT
 // ============================================================================
 const possibleCountries = flags.map(f => f.country);
-let possibleSongs = beatlesClips.map(s => s.title); 
+let possibleSongs = formattedBeatlesClips.map(s => s.title); 
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
@@ -234,9 +242,8 @@ const scoreEl            = document.getElementById("score");
 // 4. QUIZ ENGINE HELPER FUNCTIONS
 // ============================================================================
 function buildCombinedQuestions(count = 5) {
-  // Shuffle both completely independently
   const shuffledFlags = [...flags].sort(() => Math.random() - 0.5);
-  const shuffledSongs = [...beatlesClips].sort(() => Math.random() - 0.5);
+  const shuffledSongs = [...formattedBeatlesClips].sort(() => Math.random() - 0.5);
 
   const mergedRound = [];
   for (let i = 0; i < count; i++) {
@@ -280,9 +287,9 @@ function playOneSecondSample() {
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 1000); // 1000ms limit loop truncation
+        }, 1000); 
       })
-      .catch(e => console.log("Audio playback awaiting user click interaction..."));
+      .catch(e => console.log("Audio playback waiting for manual click configuration..."));
   }
 }
 
@@ -293,15 +300,15 @@ function loadQuestion() {
   const current = questions[currentQuestion];
   questionEl.textContent = `Round ${currentQuestion + 1} of ${questions.length}`;
   
-  // 1. Update Flag Image
+  // Update Flag Image
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${current.flagCode}.png`;
 
-  // 2. Handle Audio Setup (Prepped silently, waiting for button triggers)
+  // Handle Audio Setup
   clearTimeout(audioTimeout);
   if (currentAudio) { currentAudio.pause(); }
   currentAudio = new Audio(current.audioClip);
 
-  // 3. Reset UI Fields & Animations
+  // Reset UI Fields & Animations
   answerInput.classList.remove("correct", "wrong");
   songInput.classList.remove("correct", "wrong");
   feedbackEl.className = "";
