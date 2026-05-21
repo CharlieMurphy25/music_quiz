@@ -107,11 +107,11 @@ const questionEl      = document.getElementById("question");
 const answerInput     = document.getElementById("answerInput");
 const suggestionsList = document.getElementById("suggestions");
 const submitBtn       = document.getElementById("submitBtn");
-const nextBtn       = document.getElementById("nextBtn");
-const tryAgainBtn   = document.getElementById("tryAgainBtn");
-const feedbackEl    = document.getElementById("feedback");
-const errorEl       = document.getElementById("error");
-const scoreEl       = document.getElementById("score");
+const nextBtn         = document.getElementById("nextBtn");
+const tryAgainBtn     = document.getElementById("tryAgainBtn");
+const feedbackEl      = document.getElementById("feedback");
+const errorEl         = document.getElementById("error");
+const scoreEl         = document.getElementById("score");
 
 // ==========================================
 // 3. GAME STATE
@@ -181,10 +181,10 @@ function loadQuestion() {
   questionEl.textContent = `Question ${currentQuestion + 1} of ${questions.length} — Which country does this flag belong to?`;
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${code}.png`;
 
-  // 💡 Reset the cartoon animation classes for the new question
+  // Reset cartoon feedback classes from the previous round
   answerInput.classList.remove("correct");
   feedbackEl.className = "";
-  feedbackEl.style.color = ""; // Clear inline override
+  feedbackEl.style.color = ""; 
 
   answerInput.value = "";
   answerInput.disabled = false;
@@ -207,6 +207,7 @@ document.addEventListener("click", (e) => {
     clearSuggestions();
   }
 });
+
 /**
  * Handles the game over state and reveals the reset options.
  */
@@ -242,13 +243,12 @@ submitBtn.onclick = () => {
   if (selected.toLowerCase() === correct.toLowerCase()) {
     score++;
     feedbackEl.textContent = "CORRECT!";
-    // 💡 Add the cartoon text style and the input shake/glow
-    feedbackEl.className = "success-message"; 
-    answerInput.classList.add("correct");
+    feedbackEl.className = "success-message"; // Triggers cartoon text pop
+    answerInput.classList.add("correct");      // Triggers bouncy green input
   } else {
     feedbackEl.textContent = `✗ Wrong! Correct answer: ${correct}`;
-    feedbackEl.className = ""; // Reset to default layout if wrong
-    feedbackEl.style.color = "#ef4444"; // Soft modern red
+    feedbackEl.className = ""; 
+    feedbackEl.style.color = "#ef4444"; // Modern clean red color
   }
 
   answerInput.disabled = true;
