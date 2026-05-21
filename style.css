@@ -94,7 +94,7 @@ button:hover {
    🎉 CARTOONISH "CORRECT" FEEDBACK STYLES
    ========================================== */
 
-/* 1. Add this class to your #answerInput via JS when the answer is correct */
+/* Triggered via JS when the answer is correct */
 #answerInput.correct {
   background-color: #14532d; /* Deep comic-book green background */
   border: 3px solid #22c55e; /* Vibrant lime/emerald border */
@@ -105,7 +105,7 @@ button:hover {
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* 2. Optional: Add a text element like <div class="success-message">CORRECT!</div> */
+/* Triggered via JS on feedbackEl when user gets it right */
 .success-message {
   font-family: "Impact", "Arial Black", sans-serif; /* Thick, cartoonish font stack */
   font-size: 32px;
@@ -113,6 +113,7 @@ button:hover {
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-top: 20px;
+  display: block;
   
   /* Cartoon text outline effect */
   text-shadow: 
@@ -124,7 +125,7 @@ button:hover {
   animation: cartoonPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-/* 3. The bouncy, elastic cartoon animations */
+/* The bouncy, elastic cartoon animations */
 @keyframes popIn {
   0% { transform: scale(1); }
   50% { transform: scale(1.08); }
