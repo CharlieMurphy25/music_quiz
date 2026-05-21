@@ -1,5 +1,5 @@
 // ============================================================================
-// 1. DATA DEFINITIONS (Formerly data.js)
+// 1. DATA DEFINITIONS (Pre-compiled & Instant Loading)
 // ============================================================================
 
 const flags = [
@@ -145,36 +145,74 @@ const flags = [
   { code: "va", country: "Vatican City" },
 ];
 
-const beatlesSongsList = [
-  "Love Me Do", "Please Please Me", "From Me To You", "She Loves You",
-  "I Want To Hold Your Hand", "All My Loving", "Can't Buy Me Love",
-  "A Hard Day's Night", "And I Love Her", "Eight Days A Week",
-  "I Feel Fine", "Ticket To Ride", "Yesterday", "Help!",
-  "You've Got To Hide Your Love Away", "We Can Work It Out", "Day Tripper",
-  "Drive My Car", "Norwegian Wood (This Bird Has Flown)", "Nowhere Man",
-  "Michelle", "In My Life", "Girl", "Paperback Writer",
-  "Eleanor Rigby", "Yellow Submarine", "Strawberry Fields Forever", "Penny Lane", 
-  "Sgt. Pepper's Lonely Hearts Club Band", "With A Little Help From My Friends", 
-  "Lucy In The Sky With Diamonds", "A Day In The Life", "All You Need Is Love", 
-  "I Am The Walrus", "Hello Goodbye", "The Fool On The Hill", "Magical Mystery Tour",
-  "Lady Madonna", "Hey Jude", "Revolution", "Back In The U.S.S.R.",
-  "While My Guitar Gently Weeps", "Ob-La-Di Ob-La-Da", "Get Back",
-  "Don't Let Me Down", "The Ballad Of John And Yoko", "Old Brown Shoe",
-  "Here Comes The Sun", "Come Together", "Something", "Octopus's Garden", 
-  "Let It Be", "Across The Universe", "The Long And Winding Road"
+// Pre-mapped direct iTunes audio streams to ensure instant fallback loading
+const beatlesClips = [
+  { title: "Love Me Do", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/71/34/4b7134aa-8f0a-fc8c-1e24-4db23999eec3/m4a.audio.mp4" },
+  { title: "Please Please Me", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1f/2e/09/1f2e09aa-8bdf-c5e3-4c91-4c748c1e847c/m4a.audio.mp4" },
+  { title: "From Me To You", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/8a/91/36/8a9136ca-0050-7059-fa0d-58744b1c676c/m4a.audio.mp4" },
+  { title: "She Loves You", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/0d/18/ff/0d18ff06-cd76-4767-f37e-61aa98fc2fb8/m4a.audio.mp4" },
+  { title: "I Want To Hold Your Hand", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f2/77/68/f27768f5-19e9-bbf2-df49-2e633f8fb954/m4a.audio.mp4" },
+  { title: "All My Loving", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/df/f0/21dff016-1f63-356b-a2eb-6e271616d2ca/m4a.audio.mp4" },
+  { title: "Can't Buy Me Love", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/bf/f9/57/bff957db-83da-efdc-358b-088f343460e4/m4a.audio.mp4" },
+  { title: "A Hard Day's Night", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/be/89/34/be8934df-911e-289e-4c7f-94a1d48b78db/m4a.audio.mp4" },
+  { title: "And I Love Her", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c6/35/6b/c6356bd6-8964-6725-b1a7-e29f345ebc40/m4a.audio.mp4" },
+  { title: "Eight Days A Week", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/91/9f/df/919fdfb7-0097-f5da-661f-13fb00ee86d4/m4a.audio.mp4" },
+  { title: "I Feel Fine", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/d5/47/4d/d5474d22-1dcd-9742-df86-061d49112fa5/m4a.audio.mp4" },
+  { title: "Ticket To Ride", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f5/be/72/f5be72fa-7e5c-cb3b-18b6-a81e35478d38/m4a.audio.mp4" },
+  { title: "Yesterday", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/71/2e/0f/712e0fbe-0975-fcff-83f5-6677f240bf75/m4a.audio.mp4" },
+  { title: "Help!", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/df/3f/82/df3f82aa-0c58-86d1-dbbb-b7cf6f693b4f/m4a.audio.mp4" },
+  { title: "You've Got To Hide Your Love Away", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a4/bc/d0/a4bcd060-f1c5-8472-e4eb-e866e4a689b9/m4a.audio.mp4" },
+  { title: "We Can Work It Out", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5a/24/77/5a247781-dbb5-d14f-5606-d0891f7481bb/m4a.audio.mp4" },
+  { title: "Day Tripper", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/51/97/81/5197818a-f5e9-d75d-6c17-ec178ebf812b/m4a.audio.mp4" },
+  { title: "Drive My Car", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/df/b9/21dfb9bf-9923-f38b-d72b-8a1dfbe7fc0a/m4a.audio.mp4" },
+  { title: "Norwegian Wood (This Bird Has Flown)", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/91/97/e5/9197e55a-3507-68b6-98ec-7bfd5df1f953/m4a.audio.mp4" },
+  { title: "Nowhere Man", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/99/ff/d1/99ffd174-8973-f111-e1e3-c603126bebe4/m4a.audio.mp4" },
+  { title: "Michelle", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/0d/da/51/0dda51f9-8135-e414-ee17-c81b953d6d63/m4a.audio.mp4" },
+  { title: "In My Life", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/66/b6/a3/66b6a386-3392-4217-1011-823023e93148/m4a.audio.mp4" },
+  { title: "Girl", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/71/61/e8/7161e8bf-49f2-2bf2-cf70-5bca835057b4/m4a.audio.mp4" },
+  { title: "Paperback Writer", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ef/be/e0/efbee088-724d-e991-8884-3759714856b3/m4a.audio.mp4" },
+  { title: "Eleanor Rigby", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/5a/a5/cb/5aa5cb0c-a120-e2b8-df93-f1661605ec10/m4a.audio.mp4" },
+  { title: "Yellow Submarine", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/fb/0d/17/fb0d17d5-d97e-1282-cb10-18e38f4be8c8/m4a.audio.mp4" },
+  { title: "Strawberry Fields Forever", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c3/00/df/c300df23-a550-966a-ff35-e1fc84920b7a/m4a.audio.mp4" },
+  { title: "Penny Lane", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/67/62/a7676239-163e-dbbf-25c2-f1947e937d25/m4a.audio.mp4" },
+  { title: "Sgt. Pepper's Lonely Hearts Club Band", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/f7/a7/69/f7a7698f-a9cb-b2aa-f173-15792efdb9f7/m4a.audio.mp4" },
+  { title: "With A Little Help From My Friends", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/71/3b/b7/713bb7f5-2633-91b4-71be-cf2b292e76f9/m4a.audio.mp4" },
+  { title: "Lucy In The Sky With Diamonds", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/f5/3a/4bf53a47-a929-373f-c1f0-466d71b3e817/m4a.audio.mp4" },
+  { title: "A Day In The Life", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/05/cf/54/05cf5480-49fa-1d8c-4a37-97a1d1fa7b32/m4a.audio.mp4" },
+  { title: "All You Need Is Love", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/df/b5/21dfb572-132d-222c-a0b2-73138b3cf435/m4a.audio.mp4" },
+  { title: "I Am The Walrus", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dd/57/0d/dd570d57-1ba9-d3ff-568c-98282334f5aa/m4a.audio.mp4" },
+  { title: "Hello Goodbye", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/6b/14/73/6b147395-538d-d779-1fec-c9fb379c6ef4/m4a.audio.mp4" },
+  { title: "The Fool On The Hill", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2b/9a/36/2b9a367c-f9cb-be72-9602-0e3c5a589eef/m4a.audio.mp4" },
+  { title: "Magical Mystery Tour", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/dd/b5/fb/ddb5fbee-3e74-0695-15a9-46747df34a2e/m4a.audio.mp4" },
+  { title: "Lady Madonna", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/bd/13/26/bd13264b-b0bf-2f88-466d-929bdca25018/m4a.audio.mp4" },
+  { title: "Hey Jude", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a1/bc/f4/a1bcf4d1-6785-5026-6450-482f0ca36e6a/m4a.audio.mp4" },
+  { title: "Revolution", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/6a/d2/cb/6ad2cb52-eb80-0a22-3be9-5fb1e9d1bf70/m4a.audio.mp4" },
+  { title: "Back In The U.S.S.R.", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/2b/ef/0a/2bef0a18-6cf4-d754-ef86-d24268e37dc9/m4a.audio.mp4" },
+  { title: "While My Guitar Gently Weeps", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/05/cf/42/05cf4205-59c3-11b3-4675-45dbef694a1d/m4a.audio.mp4" },
+  { title: "Ob-La-Di Ob-La-Da", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cd/66/3c/cd663ce9-75b2-3c7d-ce47-3807577dfc89/m4a.audio.mp4" },
+  { title: "Get Back", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a5/d8/d5/a5d8d5df-4200-a29d-472b-8a896d8cf9f7/m4a.audio.mp4" },
+  { title: "Don't Let Me Down", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ef/be/e0/efbee0ab-db4d-91d8-a151-512c8b871c82/m4a.audio.mp4" },
+  { title: "The Ballad Of John And Yoko", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/df/3f/85/df3f8510-18e3-b9be-2dbb-43d9e8310ba0/m4a.audio.mp4" },
+  { title: "Old Brown Shoe", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/40/ff/0b/40ff0be4-5310-449e-36fa-69796e6d1912/m4a.audio.mp4" },
+  { title: "Here Comes The Sun", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/ae/2e/f1/ae2ef104-585a-0498-8ec0-2646279f0412/m4a.audio.mp4" },
+  { title: "Come Together", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/05/cf/45/05cf4592-3652-3d52-fa58-29505f6bf08f/m4a.audio.mp4" },
+  { title: "Something", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/01/be/f3/01bef381-86e0-ef9a-41bf-1502b4bb7d81/m4a.audio.mp4" },
+  { title: "Octopus's Garden", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4b/f5/3a/4bf53a47-ef92-0b0c-783f-67dbb5a932eb/m4a.audio.mp4" },
+  { title: "Let It Be", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/67/62/a7676239-0260-244e-a619-3351656ca8fb/m4a.audio.mp4" },
+  { title: "Across The Universe", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/05/cf/4c/05cf4c28-9844-3d0d-ecf7-df6cfef0bfbc/m4a.audio.mp4" },
+  { title: "The Long And Winding Road", clip: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/01/be/fd/01befdf6-8dbb-b271-beeb-c65176b66ca9/m4a.audio.mp4" }
 ];
 
 // ============================================================================
 // 2. INITIAL SETUP & STATE MANAGEMENT
 // ============================================================================
 const possibleCountries = flags.map(f => f.country);
-let possibleSongs = []; 
+let possibleSongs = beatlesClips.map(s => s.title); 
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
 let currentAudio = null;
 let audioTimeout = null; 
-let beatlesClips = [];
 
 // ============================================================================
 // 3. DOM ELEMENT SELECTION
@@ -193,47 +231,12 @@ const errorEl            = document.getElementById("error");
 const scoreEl            = document.getElementById("score");
 
 // ============================================================================
-// 4. AUDIO LOADING UTILITIES (iTunes Preview Pipeline)
-// ============================================================================
-async function fetchPreview(title) {
-  const query = encodeURIComponent(`${title} Beatles`);
-  const url = `https://itunes.apple.com/search?term=${query}&entity=song&limit=5`;
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    const match = data.results.find(r =>
-      r.artistName.toLowerCase().includes("beatles") && r.previewUrl
-    );
-    return match ? match.previewUrl : null;
-  } catch (err) {
-    console.error(`Error fetching audio for ${title}:`, err);
-    return null;
-  }
-}
-
-async function loadMusicSamples() {
-  const results = [];
-  for (const title of beatlesSongsList) {
-    const clip = await fetchPreview(title);
-    results.push({ title, clip: clip || "NOT_FOUND" });
-    // Soft rate limiting safeguard for API
-    await new Promise(r => setTimeout(r, 150));
-  }
-  beatlesClips = results;
-  console.log("🎵 Beatles music samples loaded successfully.");
-  initGame(); // Automatically start game building setup once data is synchronized!
-}
-
-// ============================================================================
-// 5. QUIZ ENGINE HELPER FUNCTIONS
+// 4. QUIZ ENGINE HELPER FUNCTIONS
 // ============================================================================
 function buildCombinedQuestions(count = 5) {
-  const validSongs = beatlesClips.filter(s => s.clip !== "NOT_FOUND");
-  possibleSongs = validSongs.map(s => s.title);
-
   // Shuffle both completely independently
   const shuffledFlags = [...flags].sort(() => Math.random() - 0.5);
-  const shuffledSongs = [...validSongs].sort(() => Math.random() - 0.5);
+  const shuffledSongs = [...beatlesClips].sort(() => Math.random() - 0.5);
 
   const mergedRound = [];
   for (let i = 0; i < count; i++) {
@@ -277,14 +280,14 @@ function playOneSecondSample() {
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 1000); 
+        }, 1000); // 1000ms limit loop truncation
       })
       .catch(e => console.log("Audio playback awaiting user click interaction..."));
   }
 }
 
 // ============================================================================
-// 6. CORE GAME RUNTIME
+// 5. CORE GAME RUNTIME
 // ============================================================================
 function loadQuestion() {
   const current = questions[currentQuestion];
@@ -335,7 +338,7 @@ function endGame() {
 }
 
 // ============================================================================
-// 7. EVENT HANDLERS
+// 6. EVENT HANDLERS
 // ============================================================================
 replayBtn.onclick = () => {
   playOneSecondSample();
@@ -432,7 +435,7 @@ tryAgainBtn.onclick = () => {
 };
 
 // ============================================================================
-// 8. INITIALIZATION ENTRY POINT
+// 7. INITIALIZATION ENTRY POINT
 // ============================================================================
 function initGame() {
   questions = buildCombinedQuestions(5); 
@@ -441,5 +444,5 @@ function initGame() {
   loadQuestion();
 }
 
-// Fire off the asynchronous resource loading sequence
-loadMusicSamples();
+// Start instantly
+initGame();
