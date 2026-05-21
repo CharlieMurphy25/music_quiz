@@ -14,3 +14,8 @@ button {
   padding: 15px 30px;
   cursor: pointer;
 }
+
+#tryAgainBtn {
+  display: block;
+  margin: 0 auto;
+}
