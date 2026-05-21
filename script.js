@@ -323,15 +323,22 @@ function loadQuestion() {
 
 function endGame() {
   clearTimeout(audioTimeout);
-  if (currentAudio) { currentAudio.pause(); }
+
+  if (currentAudio) {
+    currentAudio.pause();
+  }
+
   questionEl.textContent = "Game Over!";
-  
+
   answerInput.style.display = "none";
   songInput.style.display = "none";
   submitBtn.style.display = "none";
   nextBtn.style.display = "none";
+  replayBtn.style.display = "none";
 
-  scoreEl.textContent = `Final Score: ${score}/${questions.length} total points built up!`;
+  scoreEl.textContent =
+    `Final Score: ${score}/${questions.length} total points built up!`;
+
   tryAgainBtn.style.display = "block";
 }
 
