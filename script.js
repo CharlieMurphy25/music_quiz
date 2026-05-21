@@ -2,7 +2,6 @@
 // 1. INITIAL SETUP & STATE
 // ==========================================
 const possibleCountries = window.flags.map(f => f.country);
-// Extract the song titles from the array generated in data.js
 let possibleSongs = []; 
 let questions = [];
 let currentQuestion = 0;
@@ -40,7 +39,6 @@ function buildCombinedQuestions(count = 5) {
 
   const mergedRound = [];
   for (let i = 0; i < count; i++) {
-    // Loop back around if dataset sizes are smaller than the requested count
     const flagIdx = i % shuffledFlags.length;
     const songIdx = i % shuffledSongs.length;
 
@@ -75,7 +73,6 @@ function renderSuggestions(matches, inputElement, listElement) {
 // Custom handler to play exactly 1 second of audio
 function playOneSecondSample() {
   if (currentAudio) {
-    // Clear any pending pauses if clicked repeatedly
     clearTimeout(audioTimeout);
     
     currentAudio.currentTime = 0;
@@ -83,9 +80,9 @@ function playOneSecondSample() {
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 1000); // Stop right at 1000ms
+        }, 1000); // Truncate at exactly 1 second
       })
-      .catch(e => console.log("Audio playback waiting for user interaction..."));
+      .catch(e => console.log("Audio playback waiting for user click interaction..."));
   }
 }
 
@@ -99,7 +96,7 @@ function loadQuestion() {
   // 1. Update Flag Image
   document.getElementById("flagImg").src = `https://flagcdn.com/w320/${current.flagCode}.png`;
 
-  // 2. Handle Audio Setup (Do not auto-play, wait for button press)
+  // 2. Handle Audio Setup (Silent preparation, waits for playOneSecondSample)
   clearTimeout(audioTimeout);
   if (currentAudio) { currentAudio.pause(); }
   currentAudio = new Audio(current.audioClip);
@@ -144,7 +141,6 @@ function endGame() {
 // 5. EVENT LISTENERS
 // ==========================================
 
-// Replay button plays the restricted 1-second sample
 replayBtn.onclick = () => {
   playOneSecondSample();
 };
@@ -169,7 +165,7 @@ songInput.addEventListener("input", () => {
   renderSuggestions(matches, songInput, songSuggestionsList);
 });
 
-// Dismiss menus clicking outside
+// Hide menu if user clicks elsewhere
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".input-wrapper")) {
     clearSuggestions(suggestionsList);
@@ -177,7 +173,7 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Submit Logic
+// Submit Validator
 submitBtn.onclick = () => {
   const countryGuess = answerInput.value.trim();
   const songGuess = songInput.value.trim();
@@ -185,46 +181,42 @@ submitBtn.onclick = () => {
   if (!countryGuess || !songGuess) {
     errorEl.textContent = "Please answer both parts of the puzzle before submitting!";
     errorEl.style.display = "block";
-    return;
-  }
-
-  errorEl.style.display = "none";
-  clearSuggestions(suggestionsList);
-  clearSuggestions(songSuggestionsList);
-
-  const current = questions[currentQuestion];
-  const isCountryCorrect = countryGuess.toLowerCase() === current.correctCountry.toLowerCase();
-  const isSongCorrect = songGuess.toLowerCase() === current.correctSong.toLowerCase();
-
-  // Highlight Country Input Box
-  if (isCountryCorrect) {
-    answerInput.classList.add("correct");
-    score += 0.5; // Award partial credit
   } else {
-    answerInput.classList.add("wrong");
-  }
+    errorEl.style.display = "none";
+    clearSuggestions(suggestionsList);
+    clearSuggestions(songSuggestionsList);
 
-  // Highlight Song Input Box
-  if (isSongCorrect) {
-    songInput.classList.add("correct");
-    score += 0.5;
-  } else {
-    songInput.classList.add("wrong");
-  }
+    const current = questions[currentQuestion];
+    const isCountryCorrect = countryGuess.toLowerCase() === current.correctCountry.toLowerCase();
+    const isSongCorrect = songGuess.toLowerCase() === current.correctSong.toLowerCase();
 
-  // Generate composite feedback summary text
-  if (isCountryCorrect && isSongCorrect) {
-    feedbackEl.textContent = "PERFECT ROUND! Both are correct!";
-    feedbackEl.className = "success-message";
-  } else {
-    feedbackEl.textContent = `RESULTS — Country: ${isCountryCorrect ? '✓' : '✗ ('+current.correctCountry+')'} | Song: ${isSongCorrect ? '✓' : '✗ ('+current.correctSong+')'}`;
-    feedbackEl.className = "error-message";
-  }
+    if (isCountryCorrect) {
+      answerInput.classList.add("correct");
+      score += 0.5;
+    } else {
+      answerInput.classList.add("wrong");
+    }
 
-  answerInput.disabled = true;
-  songInput.disabled = true;
-  submitBtn.disabled = true;
-  nextBtn.style.display = "inline-block";
+    if (isSongCorrect) {
+      songInput.classList.add("correct");
+      score += 0.5;
+    } else {
+      songInput.classList.add("wrong");
+    }
+
+    if (isCountryCorrect && isSongCorrect) {
+      feedbackEl.textContent = "PERFECT ROUND! Both are correct!";
+      feedbackEl.className = "success-message";
+    } else {
+      feedbackEl.textContent = `RESULTS — Country: ${isCountryCorrect ? '✓' : '✗ ('+current.correctCountry+')'} | Song: ${isSongCorrect ? '✓' : '✗ ('+current.correctSong+')'}`;
+      feedbackEl.className = "error-message";
+    }
+
+    answerInput.disabled = true;
+    songInput.disabled = true;
+    submitBtn.disabled = true;
+    nextBtn.style.display = "inline-block";
+  }
 };
 
 nextBtn.onclick = () => {
@@ -237,7 +229,6 @@ nextBtn.onclick = () => {
 };
 
 tryAgainBtn.onclick = () => {
-  // Show inputs if hidden by game over sequence
   answerInput.style.display = "";
   songInput.style.display = "";
   initGame();
@@ -247,16 +238,14 @@ tryAgainBtn.onclick = () => {
 // 6. INITIALISATION
 // ==========================================
 function initGame() {
-  // Wait safely in case Apple API requests are still finishing data collection
   if (!window.beatles || window.beatles.length === 0) {
     setTimeout(initGame, 300);
     return;
   }
-  questions = buildCombinedQuestions(5); // Changed to 5 questions
+  questions = buildCombinedQuestions(5); 
   currentQuestion = 0;
   score = 0;
   loadQuestion();
 }
 
-// Fire up quiz engine
 initGame();
