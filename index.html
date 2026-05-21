@@ -8,13 +8,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <main class="container">
     <h1>Music Quiz Game</h1>
-
     <section id="quizContent" aria-labelledby="question">
       <h2 id="question">Loading question...</h2>
-
       <form id="quizForm">
         <label for="answerInput">Choose your answer:</label>
         <input 
@@ -27,21 +24,17 @@
         >
         <datalist id="answerOptions"></datalist>
         <small id="answerHint" class="hint">Start typing to filter options</small>
-
         <div class="controls">
           <button type="button" id="submitBtn" aria-label="Submit your answer">Submit</button>
           <button type="button" id="nextBtn" style="display: none;" aria-label="Move to next question">Next</button>
-          <button type="button" id="tryAgainBtn" style="display: none;" aria-label="Try this question again">Try Again</button>
         </div>
       </form>
-      
       <div id="feedback" aria-live="polite" aria-atomic="true"></div>
       <div id="error" role="alert" aria-live="assertive" style="display: none;"></div>
     </section>
     <button type="button" id="tryAgainBtn" style="display: none;" aria-label="Restart the quiz">Try Again</button>
     <div id="score" aria-live="polite" aria-label="Current score"></div>
   </main>
-
   <script src="script.js"></script>
 </body>
 </html>
