@@ -1,52 +1,73 @@
 // ==========================================
 // 1. INITIAL SETUP & STATE
 // ==========================================
-const possibleAnswers = window.flags.map(f => f.country);
+const possibleCountries = window.flags.map(f => f.country);
+// Extract the song titles from the array generated in data.js
+let possibleSongs = []; 
 let questions = [];
 let currentQuestion = 0;
 let score = 0;
+let currentAudio = null;
 
 // ==========================================
 // 2. DOM ELEMENT SELECTION
 // ==========================================
-const questionEl      = document.getElementById("question");
-const answerInput     = document.getElementById("answerInput");
-const suggestionsList = document.getElementById("suggestions");
-const submitBtn       = document.getElementById("submitBtn");
-const nextBtn         = document.getElementById("nextBtn");
-const tryAgainBtn     = document.getElementById("tryAgainBtn");
-const feedbackEl      = document.getElementById("feedback");
-const errorEl         = document.getElementById("error");
-const scoreEl         = document.getElementById("score");
+const questionEl         = document.getElementById("question");
+const answerInput        = document.getElementById("answerInput");
+const songInput          = document.getElementById("songInput");
+const suggestionsList    = document.getElementById("suggestions");
+const songSuggestionsList = document.getElementById("songSuggestions");
+const submitBtn          = document.getElementById("submitBtn");
+const nextBtn            = document.getElementById("nextBtn");
+const tryAgainBtn        = document.getElementById("tryAgainBtn");
+const replayBtn          = document.getElementById("replayBtn");
+const feedbackEl         = document.getElementById("feedback");
+const errorEl            = document.getElementById("error");
+const scoreEl            = document.getElementById("score");
 
 // ==========================================
 // 3. HELPER FUNCTIONS
 // ==========================================
-function buildQuestions(count = 10) {
-  return [...window.flags]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, count)
-    .map(flag => ({ correct: flag.country, code: flag.code }));
+function buildCombinedQuestions(count = 10) {
+  // Ensure we only use tracks that successfully found an audio clip
+  const validSongs = window.beatles.filter(s => s.clip !== "NOT_FOUND");
+  possibleSongs = validSongs.map(s => s.title);
+
+  // Shuffle both datasets completely independently
+  const shuffledFlags = [...window.flags].sort(() => Math.random() - 0.5);
+  const shuffledSongs = [...validSongs].sort(() => Math.random() - 0.5);
+
+  const mergedRound = [];
+  for (let i = 0; i < count; i++) {
+    // Loop back around if dataset sizes are smaller than the requested count
+    const flagIdx = i % shuffledFlags.length;
+    const songIdx = i % shuffledSongs.length;
+
+    mergedRound.push({
+      flagCode: shuffledFlags[flagIdx].code,
+      correctCountry: shuffledFlags[flagIdx].country,
+      correctSong: shuffledSongs[songIdx].title,
+      audioClip: shuffledSongs[songIdx].clip
+    });
+  }
+  return mergedRound;
 }
 
-function clearSuggestions() {
-  suggestionsList.innerHTML = "";
+function clearSuggestions(listElement) {
+  listElement.innerHTML = "";
 }
 
-function renderSuggestions(matches) {
-  clearSuggestions();
-
+function renderSuggestions(matches, inputElement, listElement) {
+  clearSuggestions(listElement);
   matches.forEach(match => {
     const li = document.createElement("li");
     li.textContent = match;
     li.setAttribute("role", "option");
-
     li.onclick = () => {
-      answerInput.value = match;
-      clearSuggestions();
+      inputElement.value = match;
+      clearSuggestions(listElement);
     };
-
-    suggestionsList.appendChild(li);
+    listElement.appendChild(li);
   });
 }
 
@@ -54,20 +75,26 @@ function renderSuggestions(matches) {
 // 4. CORE GAME ENGINE
 // ==========================================
 function loadQuestion() {
-  const { code } = questions[currentQuestion];
-  questionEl.textContent = `Question ${currentQuestion + 1} of ${questions.length} — Which country does this flag belong to?`;
-  document.getElementById("flagImg").src = `https://flagcdn.com/w320/${code}.png`;
+  const current = questions[currentQuestion];
+  questionEl.textContent = `Round ${currentQuestion + 1} of ${questions.length}`;
+  
+  // 1. Update Flag Image
+  document.getElementById("flagImg").src = `https://flagcdn.com/w320/${current.flagCode}.png`;
 
-  // Clear out both success and failure styling from previous round
+  // 2. Handle Audio Playback
+  if (currentAudio) { currentAudio.pause(); }
+  currentAudio = new Audio(current.audioClip);
+  currentAudio.play().catch(e => console.log("Audio playback waiting for user interaction..."));
+
+  // 3. Reset UI Fields & Styles
   answerInput.classList.remove("correct", "wrong");
+  songInput.classList.remove("correct", "wrong");
   feedbackEl.className = "";
-  feedbackEl.style.color = ""; 
 
   answerInput.value = "";
+  songInput.value = "";
   answerInput.disabled = false;
-  answerInput.style.display = "";
-  answerInput.focus();
-  clearSuggestions();
+  songInput.disabled = false;
 
   submitBtn.disabled = false;
   submitBtn.style.display = "";
@@ -77,74 +104,109 @@ function loadQuestion() {
   feedbackEl.textContent = "";
   errorEl.style.display = "none";
   scoreEl.textContent = "";
+  clearSuggestions(suggestionsList);
+  clearSuggestions(songSuggestionsList);
 }
 
 function endGame() {
+  if (currentAudio) { currentAudio.pause(); }
   questionEl.textContent = "Game Over!";
+  
   answerInput.style.display = "none";
+  songInput.style.display = "none";
   submitBtn.style.display = "none";
   nextBtn.style.display = "none";
 
-  scoreEl.textContent = `Final Score: ${score}/${questions.length}`;
+  scoreEl.textContent = `Final Score: ${score}/${questions.length} total points built up!`;
   tryAgainBtn.style.display = "block";
 }
 
 // ==========================================
 // 5. EVENT LISTENERS
 // ==========================================
-answerInput.addEventListener("focus", () => {
-  if (!answerInput.value.trim()) {
-    renderSuggestions(possibleAnswers.slice(0, 8));
-  }
-});
 
+// Replay button setup
+replayBtn.onclick = () => {
+  if (currentAudio) {
+    currentAudio.currentTime = 0;
+    currentAudio.play();
+  }
+};
+
+// Country Input Suggestions
+answerInput.addEventListener("focus", () => {
+  if (!answerInput.value.trim()) renderSuggestions(possibleCountries.slice(0, 6), answerInput, suggestionsList);
+});
 answerInput.addEventListener("input", () => {
   const query = answerInput.value.trim().toLowerCase();
-  let matches;
-
-  if (!query) {
-    matches = possibleAnswers.slice(0, 8);
-  } else {
-    matches = possibleAnswers
-      .filter(a => a.toLowerCase().includes(query))
-      .slice(0, 8);
-  }
-
-  renderSuggestions(matches);
+  const matches = query ? possibleCountries.filter(c => c.toLowerCase().includes(query)).slice(0, 6) : possibleCountries.slice(0, 6);
+  renderSuggestions(matches, answerInput, suggestionsList);
 });
 
+// Song Input Suggestions
+songInput.addEventListener("focus", () => {
+  if (!songInput.value.trim()) renderSuggestions(possibleSongs.slice(0, 6), songInput, songSuggestionsList);
+});
+songInput.addEventListener("input", () => {
+  const query = songInput.value.trim().toLowerCase();
+  const matches = query ? possibleSongs.filter(s => s.toLowerCase().includes(query)).slice(0, 6) : possibleSongs.slice(0, 6);
+  renderSuggestions(matches, songInput, songSuggestionsList);
+});
+
+// Dismiss menus clicking outside
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".input-wrapper")) {
-    clearSuggestions();
+    clearSuggestions(suggestionsList);
+    clearSuggestions(songSuggestionsList);
   }
 });
 
+// Submit Logic
 submitBtn.onclick = () => {
-  const selected = answerInput.value.trim();
+  const countryGuess = answerInput.value.trim();
+  const songGuess = songInput.value.trim();
 
-  if (!selected) {
-    errorEl.textContent = "Please enter an answer before submitting.";
+  if (!countryGuess || !songGuess) {
+    errorEl.textContent = "Please answer both parts of the puzzle before submitting!";
     errorEl.style.display = "block";
     return;
   }
 
   errorEl.style.display = "none";
-  clearSuggestions();
+  clearSuggestions(suggestionsList);
+  clearSuggestions(songSuggestionsList);
 
-  const correct = questions[currentQuestion].correct;
+  const current = questions[currentQuestion];
+  const isCountryCorrect = countryGuess.toLowerCase() === current.correctCountry.toLowerCase();
+  const isSongCorrect = songGuess.toLowerCase() === current.correctSong.toLowerCase();
 
-  if (selected.toLowerCase() === correct.toLowerCase()) {
-    score++;
-    feedbackEl.textContent = "CORRECT!";
-    feedbackEl.className = "success-message"; 
-    answerInput.classList.add("correct");      
+  // Highlight Country Input Box
+  if (isCountryCorrect) {
+    answerInput.classList.add("correct");
+    score += 0.5; // Award partial credit
   } else {
-    feedbackEl.textContent = `WRONG! ANSWER IS: ${correct}`;
-    feedbackEl.className = "error-message";   
-    answerInput.classList.add("wrong");        
+    answerInput.classList.add("wrong");
+  }
+
+  // Highlight Song Input Box
+  if (isSongCorrect) {
+    songInput.classList.add("correct");
+    score += 0.5;
+  } else {
+    songInput.classList.add("wrong");
+  }
+
+  // Generate composite feedback summary text
+  if (isCountryCorrect && isSongCorrect) {
+    feedbackEl.textContent = "PERFECT ROUND! Both are correct!";
+    feedbackEl.className = "success-message";
+  } else {
+    feedbackEl.textContent = `RESULTS — Country: ${isCountryCorrect ? '✓' : '✗ ('+current.correctCountry+')'} | Song: ${isSongCorrect ? '✓' : '✗ ('+current.correctSong+')'}`;
+    feedbackEl.className = "error-message";
   }
 
   answerInput.disabled = true;
+  songInput.disabled = true;
   submitBtn.disabled = true;
   nextBtn.style.display = "inline-block";
 };
@@ -159,6 +221,9 @@ nextBtn.onclick = () => {
 };
 
 tryAgainBtn.onclick = () => {
+  // Show inputs if hidden by game over sequence
+  answerInput.style.display = "";
+  songInput.style.display = "";
   initGame();
 };
 
@@ -166,11 +231,16 @@ tryAgainBtn.onclick = () => {
 // 6. INITIALISATION
 // ==========================================
 function initGame() {
-  questions = buildQuestions();
+  // Wait safely in case Apple API requests are still finishing data collection
+  if (!window.beatles || window.beatles.length === 0) {
+    setTimeout(initGame, 300);
+    return;
+  }
+  questions = buildCombinedQuestions(10);
   currentQuestion = 0;
   score = 0;
   loadQuestion();
 }
 
-// Run the initialization code when the page loads
+// Fire up quiz engine
 initGame();
