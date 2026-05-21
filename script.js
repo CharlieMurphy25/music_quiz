@@ -8,7 +8,7 @@ const possibleAnswers = [
 
 const questions = [
   { question: "Which iconic Britpop band released the hit album '(What's the Story) Morning Glory?'", correct: "Oasis" },
-  { question: "Who was the lead singer of Take That before launching a massive solo career with hits like 'Angels'?", correct: "Robbie Williams" },
+  { question: "Who was a member of Take That before launching a massive solo career with hits like 'Angels'?", correct: "Robbie Williams" },
   { question: "Which legendary Liverpool band released the album 'Abbey Road' in 1969?", correct: "The Beatles" }
 ];
 
