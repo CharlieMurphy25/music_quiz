@@ -83,7 +83,8 @@ tryAgainBtn.onclick = () => {
   score = 0;
 
   questionEl.textContent = "Loading question...";
-  quizForm.style.display = "block";
+  answerInput.style.display = "inline-block";
+  submitBtn.style.display = "inline-block";  
   tryAgainBtn.style.display = "none";
   scoreEl.textContent = "";
   feedbackEl.textContent = "";
