@@ -469,6 +469,9 @@ function showScreen(screenEl) {
 // Main menu → settings
 document.getElementById("menuPlayBtn").onclick = () => showScreen(settingsScreenEl);
 
+// Back button → main menu
+document.getElementById("backBtn").onclick = () => showScreen(mainMenuEl);
+
 // Share Button Functionality
 // copy link
 document.getElementById("shareBtn").onclick = () => {
