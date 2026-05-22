@@ -469,6 +469,12 @@ function showScreen(screenEl) {
 // Main menu → settings
 document.getElementById("menuPlayBtn").onclick = () => showScreen(settingsScreenEl);
 
+// Share Button Functionality
+// copy link
+document.getElementById("shareBtn").onclick = () => {
+  navigator.clipboard.writeText("https://charliemurphy25.github.io/music_quiz/");
+};
+
 // Exclusive option-card selection within each group
 document.querySelectorAll(".option-group").forEach(group => {
   group.querySelectorAll(".option-card").forEach(card => {
