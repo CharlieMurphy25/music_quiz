@@ -247,11 +247,11 @@ button:hover {
 }
 
 .menu-subtitle {
-  color: #4e4e54;
+  color: ##5f5f66;
   font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: -26px 0 48px;
+  margin: -20px 0 48px;
 }
 
 .menu-nav {
