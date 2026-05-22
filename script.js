@@ -179,7 +179,7 @@ const beatlesClips = [
   { title: "I Feel Fine", clip: "beatles/IFeelFine.mp3" },
   { title: "I Saw Her Standing There", clip: "beatles/ISawHerStandingThere.mp3" },
   { title: "I Want To Hold Your Hand", clip: "beatles/IWantToHoldYourHand.mp3" },
-  { title: "I Want You", clip: "beatles/IWantYou.mp3" },
+  { title: "I Want You (She's So Heavy)", clip: "beatles/IWantYou.mp3" },
   { title: "If I Needed Someone", clip: "beatles/IfINeededSomeone.mp3" },
   { title: "I'm Only Sleeping", clip: "beatles/ImOnlySleeping.mp3" },
   { title: "In My Life", clip: "beatles/InMyLife.mp3" },
