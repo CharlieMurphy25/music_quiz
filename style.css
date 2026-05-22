@@ -238,20 +238,25 @@ button:hover {
 /* ==========================================
    🎬 MAIN MENU
    ========================================== */
+.site-title {
+  letter-spacing: 0.1em; /* spread letters apart */
+  margin-bottom: 0px 0px 15px;     /* gap between title and tagline below */
+}
+
 .menu-tagline {
   color: #71717a;
   font-size: 14px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  margin: -16px 0 48px;
+  margin: 0px 0 15px;
 }
 
 .menu-subtitle {
-  color: ##5f5f66;
+  color: #5f5f66;
   font-size: 12px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  margin: -20px 0 48px;
+  margin: 0px 0 15px;
 }
 
 .menu-nav {
