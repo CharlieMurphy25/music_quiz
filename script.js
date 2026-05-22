@@ -295,7 +295,7 @@ function playOneSecondSample() {
       .then(() => {
         audioTimeout = setTimeout(() => {
           currentAudio.pause();
-        }, 2000); // 2-second sample window cut-off
+        }, 1000); // 2-second sample window cut-off
       })
       .catch(e => console.log("Audio waiting for manual user interaction gesture..."));
   }
