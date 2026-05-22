@@ -230,3 +230,168 @@ button:hover {
   20%, 60% { transform: translateX(-8px) rotate(-1.5deg); }
   40%, 80% { transform: translateX(8px) rotate(1.5deg); }
 }
+
+/* ==========================================
+   🏠 SCREEN SYSTEM
+   ========================================== */
+.screen {
+  animation: screenFadeIn 0.35s ease forwards;
+}
+
+@keyframes screenFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+   🎬 MAIN MENU
+   ========================================== */
+.menu-tagline {
+  color: #71717a;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: -16px 0 48px;
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.menu-btn {
+  width: 220px;
+  margin: 0;
+  padding: 16px 32px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.menu-btn--primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-color: #1d4ed8;
+  box-shadow: 0 4px 18px rgba(59,130,246,0.35);
+}
+
+.menu-btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(59,130,246,0.45);
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.menu-btn--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.menu-btn--disabled:hover {
+  background-color: #27272a;
+  border-color: #3f3f46;
+  transform: none;
+}
+
+/* ==========================================
+   ⚙️ SETTINGS SCREEN
+   ========================================== */
+.settings-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #e4e4e7;
+  margin-bottom: 36px;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.settings-block {}
+
+.settings-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #71717a;
+  margin: 0 0 12px 4px;
+}
+
+.option-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.option-card {
+  margin: 0;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  border: 1px solid #3f3f46;
+  background: #1c1c1f;
+  color: #a1a1aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  min-width: 100px;
+  flex: 1;
+}
+
+.option-card:hover {
+  border-color: #52525b;
+  color: #e4e4e7;
+  background: #27272a;
+}
+
+.option-card.selected {
+  border-color: #3b82f6;
+  background: rgba(59,130,246,0.12);
+  color: #93c5fd;
+  box-shadow: 0 0 0 1px #3b82f6, 0 4px 14px rgba(59,130,246,0.2);
+}
+
+.option-sub {
+  font-size: 11px;
+  color: #52525b;
+  font-weight: 400;
+  display: block;
+}
+
+.option-card.selected .option-sub {
+  color: #60a5fa;
+}
+
+.confirm-btn {
+  margin: 44px auto 0;
+  display: block;
+  width: 200px;
+  padding: 15px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #15803d;
+  color: white;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 18px rgba(34,197,94,0.3);
+  transition: all 0.2s ease;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(34,197,94,0.4);
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+}

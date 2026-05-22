@@ -450,6 +450,44 @@ nextBtn.onclick = () => {
   }
 };
 
+// tryAgainBtn.onclick is defined in the screen navigation section below
+
+// ============================================================================
+// 7. SCREEN NAVIGATION & SETTINGS
+// ============================================================================
+const mainMenuEl      = document.getElementById("mainMenu");
+const settingsScreenEl = document.getElementById("settingsScreen");
+const quizContentEl   = document.getElementById("quizContent");
+
+let chosenQuestionCount = 5;
+
+function showScreen(screenEl) {
+  [mainMenuEl, settingsScreenEl, quizContentEl].forEach(s => s.style.display = "none");
+  screenEl.style.display = "";
+}
+
+// Main menu → settings
+document.getElementById("menuPlayBtn").onclick = () => showScreen(settingsScreenEl);
+
+// Exclusive option-card selection within each group
+document.querySelectorAll(".option-group").forEach(group => {
+  group.querySelectorAll(".option-card").forEach(card => {
+    card.onclick = () => {
+      group.querySelectorAll(".option-card").forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+    };
+  });
+});
+
+// Settings confirm → quiz
+document.getElementById("confirmBtn").onclick = () => {
+  const lengthCard = document.querySelector("#lengthGroup .option-card.selected");
+  chosenQuestionCount = lengthCard ? parseInt(lengthCard.dataset.value, 10) : 5;
+  showScreen(quizContentEl);
+  initGame(chosenQuestionCount);
+};
+
+// Try Again → back to main menu
 tryAgainBtn.onclick = () => {
   answerInput.style.display = "";
   songInput.style.display = "";
@@ -457,18 +495,18 @@ tryAgainBtn.onclick = () => {
   replayBtn.style.display = "";
   answerInput.classList.remove("correct", "wrong");
   songInput.classList.remove("correct", "wrong");
-  initGame();
+  showScreen(mainMenuEl);
 };
 
 // ============================================================================
-// 7. INITIALIZATION ENTRY POINT
+// 8. INITIALIZATION ENTRY POINT
 // ============================================================================
-function initGame() {
-  questions = buildCombinedQuestions(5); 
+function initGame(count = 5) {
+  questions = buildCombinedQuestions(count);
   currentQuestion = 0;
   score = 0;
   loadQuestion();
 }
 
-// Start instantly
-initGame();
+// Start at main menu
+showScreen(mainMenuEl);

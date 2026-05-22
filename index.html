@@ -10,7 +10,53 @@
 <body>
   <main class="container">
     <h1>Flag & Music Quiz</h1>
-    <section id="quizContent" aria-labelledby="question">
+
+    <!-- ===== MAIN MENU ===== -->
+    <section id="mainMenu" class="screen">
+      <p class="menu-tagline">Flags · Music · Knowledge</p>
+      <nav class="menu-nav">
+        <button id="menuPlayBtn" class="menu-btn menu-btn--primary">▶ Play</button>
+        <button class="menu-btn menu-btn--disabled" disabled aria-disabled="true">⚙ Settings</button>
+        <button class="menu-btn menu-btn--disabled" disabled aria-disabled="true">↗ Share</button>
+      </nav>
+    </section>
+
+    <!-- ===== SETTINGS / LOBBY ===== -->
+    <section id="settingsScreen" class="screen" style="display:none;">
+      <h2 class="settings-title">Set Up Your Quiz</h2>
+
+      <div class="settings-grid">
+
+        <div class="settings-block">
+          <h3 class="settings-label">Artist</h3>
+          <div class="option-group" id="artistGroup">
+            <button class="option-card selected" data-value="beatles">🎸 The Beatles</button>
+          </div>
+        </div>
+
+        <div class="settings-block">
+          <h3 class="settings-label">Geography</h3>
+          <div class="option-group" id="geoGroup">
+            <button class="option-card selected" data-value="flags">🌍 Flags</button>
+          </div>
+        </div>
+
+        <div class="settings-block">
+          <h3 class="settings-label">Length</h3>
+          <div class="option-group" id="lengthGroup">
+            <button class="option-card selected" data-value="5">Short <span class="option-sub">5 questions</span></button>
+            <button class="option-card" data-value="10">Medium <span class="option-sub">10 questions</span></button>
+            <button class="option-card" data-value="15">Long <span class="option-sub">15 questions</span></button>
+          </div>
+        </div>
+
+      </div>
+
+      <button id="confirmBtn" class="confirm-btn">Confirm & Play</button>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section id="quizContent" aria-labelledby="question" style="display:none;">
       <h2 id="question">Loading question...</h2>
 
       <form id="quizForm">
